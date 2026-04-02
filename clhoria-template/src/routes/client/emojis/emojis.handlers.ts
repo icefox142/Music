@@ -1,6 +1,6 @@
 import type { EmojiRouteHandlerType } from "./emojis.types";
 
-import { and, eq, or, sql } from "drizzle-orm";
+import { and, count, eq, or, sql } from "drizzle-orm";
 
 import db from "@/db";
 import * as HttpStatusCodes from "@/lib/core/stoker/http-status-codes";
@@ -40,6 +40,12 @@ export const list: EmojiRouteHandlerType<"list"> = async (c) => {
     );
   }
 
+  // Get total count / 获取总数
+  const [{ total }] = await db
+    .select({ total: count() })
+    .from(clientEmojis)
+    .where(conditions.length > 0 ? and(...conditions) : undefined);
+
   // Execute query / 执行查询
   const emojis = await db
     .select()
@@ -49,7 +55,15 @@ export const list: EmojiRouteHandlerType<"list"> = async (c) => {
     .limit(pageSize)
     .offset((page - 1) * pageSize);
 
-  return c.json(Resp.ok(emojis), HttpStatusCodes.OK);
+  return c.json(
+    Resp.ok({
+      data: emojis,
+      total,
+      page,
+      pageSize,
+    }),
+    HttpStatusCodes.OK
+  );
 };
 
 /** Create new emoji / 创建表情包 */

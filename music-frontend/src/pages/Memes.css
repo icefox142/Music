@@ -1,0 +1,65 @@
+/**
+ * 表情包页面样式
+ * Memes page styles
+ */
+
+.memes-page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.memes-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.memes-main {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.memes-header {
+  margin-bottom: 24px;
+}
+
+.memes-header h2 {
+  margin: 0 0 16px 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+.selected-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.selected-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  background: #1890ff;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.selected-tag:hover {
+  background: #40a9ff;
+}
+
+.selected-tag::before {
+  content: "";
+  margin-right: 6px;
+}
+
+/* ===== 引入悬浮球组件样式 ===== */
+@import url("../components/memes/SidebarToggle.css");
+

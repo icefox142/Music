@@ -1,0 +1,23 @@
+/**
+ * 音乐页面样式
+ * Music page styles
+ */
+
+.music-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.music-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.music-player-wrapper {
+  flex-shrink: 0;
+  border-top: 1px solid #e0e0e0;
+  background: #fff;
+}
