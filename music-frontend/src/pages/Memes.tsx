@@ -21,7 +21,7 @@ export function Memes() {
         return [...prev, tag];
       }
     });
-    setCurrentPage(1); // 重置到第一页
+    setCurrentPage(1); 
   };
 
   const handlePageChange = (page: number) => {
