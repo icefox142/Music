@@ -1,0 +1,280 @@
+[33mcommit 1456dd3bd9730d60e61a8ee08b0809a04cc72d0b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: zhe-qi <zheqi0910@gmail.com>
+Date:   Thu Feb 12 12:56:07 2026 +0800
+
+    feat: 更新
+
+[33mcommit e312b28d287ce782718a208a413b73cdf0edc802[m
+Author: zhe-qi <zheqi0910@gmail.com>
+Date:   Thu Feb 12 12:55:10 2026 +0800
+
+    feat: 更新
+
+[33mcommit 63a76762bd42caa50f74e3bc508756efbf315e43[m
+Author: zhe-qi <zheqi0910@gmail.com>
+Date:   Fri Jan 30 12:46:57 2026 +0800
+
+    fix: 将分页组件文本改为中文
+    
+    Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+
+[33mcommit 802f3d4931a2c719376f75a21c53d906ec199d62[m
+Author: zhe-qi <zheqi0910@gmail.com>
+Date:   Tue Jan 27 14:44:53 2026 +0800
+
+    refactor: 统一路由命名为复数形式（dict→dicts, param→params）
+    
+    - 重命名 dict 页面模块为 dicts
+    - 重命名 param 页面模块为 params
+    - 更新 App.tsx 路由配置和资源定义
+    - 更新 i18n.ts 资源键名
+    - 重新生成 OpenAPI 类型文件
+    - 更新所有组件中的类型引用
+    
+    Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+
+[33mcommit 6e8c8f5688432d96fc59b3bd7fc1a226a4503ed0[m
+Author: zhe-qi <zheqi0910@gmail.com>
+Date:   Mon Jan 26 14:21:59 2026 +0800
+
+    feat: 添加系统参数配置管理页面
+    
+    - 新增参数列表页（含筛选、操作按钮）
+    - 新增创建/编辑页面（支持值类型动态输入）
+    - 新增详情页（JSON 格式化显示）
+    - 更新路由和资源配置
+    - 添加中文国际化翻译
+    
+    Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+
+[33mcommit 8617d1e7ad44289c1cd69c64baeee362eece1ebc[m
+Author: zhe-qi <zheqi0910@gmail.com>
+Date:   Fri Jan 23 15:45:16 2026 +0800
+
+    fix: 修复lint报错
+
+[33mcommit 748ef4e4d8cbae344a9d371ca44f30a96e2c3851[m
+Author: zhe-qi <zheqi0910@gmail.com>
+Date:   Fri Jan 23 15:37:32 2026 +0800
+
+    refactor: 重构页面结构并添加字典管理模块
+    
+    - 将 roles、users 页面移动到 system 目录下，统一系统管理模块结构
+    - 新增字典管理功能（创建、编辑、列表、详情）
+    - 修复 TypeScript 类型错误：
+      - data-table-filter 添加缺失的 eqs、nes 操作符
+      - dict 表单类型定义优化
+    - 更新 App.tsx 路由配置，添加字典管理路由
+    - 完善 i18n 国际化配置
+    - 升级依赖：@refinedev/core、@tanstack/react-query、casbin 等
+    
+    Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+
+[33mcommit 2ca726203c26405d96ae92025586896c3133c65a[m
+Author: zhe-qi <zheqi0910@gmail.com>
+Date:   Fri Dec 26 12:21:57 2025 +0800
+
+    chore: 升级依赖并简化 Casbin 权限模型
+    
+    - 升级多个依赖包版本（vite、zod、react-router 等）
+    - 简化 Casbin 权限模型，移除 eft 字段和 deny 规则
+    - 更新 pnpm-workspace 配置
+    
+    🤖 Generated with [Claude Code](https://claude.com/claude-code)
+    
+    Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+
+[33mcommit 3bb8ef7a519ef671a8ea670e13d3f49a81aa8ec0[m
+Author: zhe-qi <zheqi0910@gmail.com>
+Date:   Mon Dec 15 10:36:31 2025 +0800
+
+    chore: 升级项目依赖
+    
+    升级包括 React 19.2.3、TailwindCSS 4.1.18、Casbin 5.45.0、ESLint 9.39.2 等多个依赖。
+    
+    🤖 Generated with [Claude Code](https://claude.com/claude-code)
+    
+    Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+
+[33mcommit 17f07927e5ba2010ee4c3456879826adad1b083d[m
+Author: zhe-qi <zheqi0910@gmail.com>
+Date:   Tue Dec 9 14:04:40 2025 +0800
+
+    Update application configuration and components
+    
+    🤖 Generated with [Claude Code](https://claude.com/claude-code)
+    
+    Co-Authored-By: Claude <noreply@anthropic.com>
+
+[33mcommit 7428ca31a3bebb7ed7f17959da6cfdbe903ffc98[m
+Author: zhe-qi <zheqi0910@gmail.com>
+Date:   Fri Dec 5 16:14:29 2025 +0800
+
+    chore: 升级依赖并优化代码质量
+    
+    - 升级 React 至 19.2.1、react-router 至 7.10.0 及其他依赖
+    - 移除 data-provider 中的调试日志
+    - 修复 ESLint 警告并添加必要的禁用注释
+    - 改进 Button 组件，新增 icon-sm 和 icon-lg 尺寸变体
+    - 重构 Calendar 组件，增强自定义和功能
+    - 优化类型定义和代码风格
+    
+    🤖 Generated with [Claude Code](https://claude.com/claude-code)
+    
+    Co-Authored-By: Claude <noreply@anthropic.com>
+
+[33mcommit 249eb2dd6141a43c6b70d9efb87a1b2862e04980[m
+Author: zhe-qi <zheqi0910@gmail.com>
+Date:   Tue Nov 25 19:23:07 2025 +0800
+
+    fix: 保存权限时只传入直接权限，过滤掉继承权限
+    
+    与后端新逻辑保持一致，前端只需传入直接分配的权限，
+    不再传入从父角色继承的权限，避免后端校验失败。
+    
+    🤖 Generated with [Claude Code](https://claude.com/claude-code)
+    
+    Co-Authored-By: Claude <noreply@anthropic.com>
+
+[33mcommit 5f01410943df9d71f3adcd01a38a1001337d33ee[m
+Author: zhe-qi <zheqi0910@gmail.com>
+Date:   Tue Nov 25 19:03:13 2025 +0800
+
+    feat: 使用 Casbin 动态计算继承权限，优化权限管理架构
+    
+    - 更新 API 类型定义，支持 groupings（角色继承关系）
+    - 使用 Casbin enforcer 在前端动态计算继承权限
+    - 统一权限数据格式，包含 permissions 和 groupings
+    - 导出 getEnforcer 供其他模块使用
+    
+    🤖 Generated with [Claude Code](https://claude.com/claude-code)
+    
+    Co-Authored-By: Claude <noreply@anthropic.com>
+
+[33mcommit 0dc1602dc129c4882daa1fd4b22120f2269580fd[m
+Author: zhe-qi <zheqi0910@gmail.com>
+Date:   Tue Nov 25 13:08:34 2025 +0800
+
+    fix: 修复菜单首次加载时消失问题，优化权限缓存策略
+    
+    - 使用 useCan hook 检测权限加载状态，加载期间显示菜单
+    - 将所有认证数据从 sessionStorage 改为 localStorage
+    - 实现 stale-while-revalidate 权限缓存策略
+    - 权限缓存24小时，先返回缓存后台更新
+    - 即使API失败也能使用缓存保证菜单显示
+    
+    🤖 Generated with [Claude Code](https://claude.com/claude-code)
+    
+    Co-Authored-By: Claude <noreply@anthropic.com>
+
+[33mcommit 64302b369fc8034bb54031110a5afc11932e5819[m
+Author: zhe-qi <zheqi0910@gmail.com>
+Date:   Tue Nov 25 12:17:29 2025 +0800
+
+    fix: 优化权限加载并发控制，修复token刷新时权限同步问题
+    
+    - 添加enforcerLoading防止权限并发加载
+    - 修复token刷新时权限缓存未清除的问题
+    - 确保新token对应的权限能正确加载
+    
+    🤖 Generated with [Claude Code](https://claude.com/claude-code)
+    
+    Co-Authored-By: Claude <noreply@anthropic.com>
+
+[33mcommit 49f641172907103d8b32f53e25d8dcea8bf00df7[m
+Author: zhe-qi <zheqi0910@gmail.com>
+Date:   Mon Nov 24 16:57:20 2025 +0800
+
+    feat: 支持角色层级关系并优化错误处理
+    
+    - 新增角色层级关系支持（parentRoles/parentRoleIds）
+    - 优化 API 错误响应结构，提供更详细的错误信息
+    - 改进 data-provider 错误消息提取和处理逻辑
+    - 完善国际化翻译，添加通知相关文本
+    - 更新依赖包至最新版本
+    
+    🤖 Generated with [Claude Code](https://claude.com/claude-code)
+    
+    Co-Authored-By: Claude <noreply@anthropic.com>
+
+[33mcommit 9c88db83355f66397ca1236ee5ecc670003a795c[m
+Author: zhe-qi <zheqi0910@gmail.com>
+Date:   Mon Nov 24 13:07:40 2025 +0800
+
+    fix: 优化权限检查和缓存机制，避免菜单闪烁
+    
+    - 修改侧边栏权限检查逻辑，初始状态设为显示以避免菜单闪烁
+    - 优化权限缓存策略，token刷新时保留权限缓存
+    - 只在登出和401错误时清除权限缓存
+    - 添加权限检查失败时的容错处理
+    
+    🤖 Generated with [Claude Code](https://claude.com/claude-code)
+    
+    Co-Authored-By: Claude <noreply@anthropic.com>
+
+[33mcommit abf992acb72c250945371bd3bf46022b2e57bbc6[m
+Author: zhe-qi <zheqi0910@gmail.com>
+Date:   Thu Nov 20 19:19:19 2025 +0800
+
+    feat: 为侧边栏菜单添加权限控制
+    
+    使用 CanAccess 组件对菜单项进行权限检查，
+    隐藏用户无权访问的菜单项
+    
+    🤖 Generated with [Claude Code](https://claude.com/claude-code)
+    
+    Co-Authored-By: Claude <noreply@anthropic.com>
+
+[33mcommit c3add6c8aa18c649581044d6768ba6c622d9a7e1[m
+Author: zhe-qi <zheqi0910@gmail.com>
+Date:   Thu Nov 6 17:29:54 2025 +0800
+
+    feat: 实现对象存储和图片上传功能
+    
+    - 新增对象存储上传和下载的管理员 API 端点
+    - 创建图片上传组件（ImageUpload）和上传工具函数
+    - 用户创建和编辑页面集成图片上传组件替代原有文本输入
+    - 用户详情页面使用 getImageUrl 处理头像显示
+    - 修复权限树表格对无 basePath 资源的支持
+    - 在 App 中添加"通用资源"模块展示公共 API
+    
+    🤖 Generated with [Claude Code](https://claude.com/claude-code)
+    
+    Co-Authored-By: Claude <noreply@anthropic.com>
+
+[33mcommit 7b9cba01355054cf82957db0d98f7d1bdcd3a008[m
+Author: zhe-qi <zheqi0910@gmail.com>
+Date:   Thu Nov 6 00:13:28 2025 +0800
+
+    feat: 为用户和角色列表添加查询过滤功能
+    
+    - 用户列表: 添加用户名、昵称的模糊搜索和状态筛选
+    - 角色列表: 添加角色名称的模糊搜索和状态筛选
+    - 使用 DataTableFilterDropdownText 组件实现文本搜索
+    - 使用 DataTableFilterCombobox 组件实现状态下拉选择
+    - 过滤条件与 URL 查询参数同步,支持页面刷新保持状态
+    
+    🤖 Generated with [Claude Code](https://claude.com/claude-code)
+    
+    Co-Authored-By: Claude <noreply@anthropic.com>
+
+[33mcommit 5ae57d6a14632b62a17886de437e6106f444fd36[m
+Author: zhe-qi <zheqi0910@gmail.com>
+Date:   Wed Nov 5 22:38:19 2025 +0800
+
+    refactor: 更新用户和角色状态枚举
+    
+    - 将状态从数字类型(1/0/-1)改为字符串枚举(ENABLED/DISABLED)
+    - 更新用户页面(list/create/edit/show)使用新的状态枚举
+    - 更新角色页面(list/create/edit/show)使用新的状态枚举
+    - 统一使用 PathsApiAdminSystemRolesGetResponses200ContentApplicationJsonDataStatus 枚举
+
+[33mcommit f1431291c33d3acc6ec1de66f1966d27d47bbe1a[m
+Author: zhe-qi <zheqi0910@gmail.com>
+Date:   Tue Nov 4 01:36:46 2025 +0800
+
+    Initial commit: Refine project setup
+    
+    🤖 Generated with [Claude Code](https://claude.com/claude-code)
+    
+    Co-Authored-By: Claude <noreply@anthropic.com>

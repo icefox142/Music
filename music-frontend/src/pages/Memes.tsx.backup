@@ -1,0 +1,41 @@
+/**
+ * Memes 页面测试和验证脚本
+ * 用于检查 Mock 数据对接是否正确
+ */
+
+import { MOCK_EMOJIS } from '@/mocks/emoji-data';
+import { USE_MOCK } from '@/mocks/emojis';
+
+console.log('🔍 Memes 页面诊断信息:');
+console.log('='.repeat(50));
+
+// 1. 检查 Mock 数据
+console.log('✅ Mock 数据状态:');
+console.log(`  - Mock 数据总数: ${MOCK_EMOJIS.length}`);
+console.log(`  - USE_MOCK 开关: ${USE_MOCK}`);
+console.log(`  - 环境变量 VITE_USE_MOCK: ${import.meta.env.VITE_USE_MOCK}`);
+
+// 2. 显示所有表情包
+console.log('\n✅ 所有表情包列表:');
+MOCK_EMOJIS.forEach((emoji, index) => {
+  console.log(`  ${index + 1}. ${emoji.name} (${emoji.category}) - 标签: ${emoji.tags.join(', ')}`);
+});
+
+// 3. 检查分页配置
+const pageSize = 50;
+const totalPages = Math.ceil(MOCK_EMOJIS.length / pageSize);
+console.log('\n✅ 分页配置:');
+console.log(`  - 每页数量: ${pageSize}`);
+console.log(`  - 总页数: ${totalPages}`);
+console.log(`  - 是否需要分页: ${totalPages > 1 ? '是' : '否'}`);
+
+// 4. 测试筛选功能
+console.log('\n✅ 标签筛选测试:');
+const tags = ['热门', '搞笑', '可爱', '表情', '动物'];
+tags.forEach(tag => {
+  const count = MOCK_EMOJIS.filter(e => e.tags.includes(tag)).length;
+  console.log(`  - ${tag}: ${count} 个表情包`);
+});
+
+console.log('\n' + '='.repeat(50));
+console.log('✅ 诊断完成！如果看到 20 个表情包，说明 Mock 数据正常');

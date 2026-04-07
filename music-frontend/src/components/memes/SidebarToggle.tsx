@@ -1,17 +1,14 @@
-/**
- * 侧边栏折叠悬浮球组件
- * Sidebar Toggle Floating Button Component
- */
-
 import { useState, useRef, useEffect } from "react";
 import "./SidebarToggle.css";
 
 interface SidebarToggleProps {
   children?: React.ReactNode;
+  title?: string;
 }
 
 export function SidebarToggle({
   children,
+  title = "标签筛选",
 }: SidebarToggleProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -45,7 +42,7 @@ export function SidebarToggle({
     if (!isDragging || !containerRef.current) return;
 
     const containerRect = containerRef.current.getBoundingClientRect();
-    const buttonSize = 32;
+    const buttonSize = 36;
     const padding = 10;
 
     const newX = e.clientX - containerRect.left - dragStartPosition.current.x;
@@ -88,11 +85,13 @@ export function SidebarToggle({
       <aside
         className={`floating-sidebar ${isExpanded ? "expanded" : ""}`}
         style={{
-          left: `${position.x + 32}px`,
+          left: `${position.x + 40}px`,
           top: `${position.y}px`,
         }}
       >
-        {children}
+        <div className="sidebar-scroll-wrapper">
+          {children}
+        </div>
       </aside>
 
       <button
@@ -100,13 +99,14 @@ export function SidebarToggle({
         className={`toggle ${isDragging ? "dragging" : ""} ${isExpanded ? "active" : ""}`}
         onMouseDown={handleMouseDown}
         aria-label={isExpanded ? "收起侧边栏" : "展开侧边栏"}
-        title={isExpanded ? "收起" : "展开"}
+        title={isExpanded ? "收起" : title}
         style={{
           left: `${position.x}px`,
           top: `${position.y}px`,
         }}
       >
-        <span className="arrow">{isExpanded ? "×" : "☰"}</span>
+        <span className="toggle-text">{title}</span>
+        <span className="toggle-icon">{isExpanded ? "×" : "☰"}</span>
       </button>
     </div>
   );

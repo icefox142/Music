@@ -12,7 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Workspace Structure
 
-This directory contains three projects forming a full-stack music application:
+This directory contains three **independent** projects forming a full-stack music application:
 
 ```
 Music/
@@ -20,6 +20,8 @@ Music/
 ├── refine-project/      # Admin Panel Frontend (Refine + React + shadcn/ui)
 └── music-frontend/      # Client Frontend (Vite + React + React Router)
 ```
+
+**Important**: These are three separate projects, not a monorepo. Each has its own `package.json`, `pnpm-lock.yaml`, and dependencies. They communicate only via HTTP API.
 
 **API Relationship**: Both frontends consume the backend's OpenAPI specification. The admin panel uses `openapi-typescript` for type generation, while the client frontend has its own API client layer.
 
@@ -310,10 +312,11 @@ cd refine-project && pnpm openapi  # Regenerate admin types
 - **Validation**: Zod schemas with Chinese error messages
 - **Console**: NEVER use `console.log/warn/error` (except: env validation, singleton, tests, scripts)
 
-**CRUD Module Development**: Use `/crud` skill in backend
-**Database Schema Development**: Use `/db-schema` skill in backend
+**Backend-Specific Skills** (available in backend directory):
+- `/crud` - Generate complete CRUD modules (schema, routes, handlers, tests)
+- `/db-schema` - Generate database schema with Drizzle ORM
 
-**VSCode Code Snippets**: Backend includes comprehensive VSCode snippets (`/.vscode/crud.code-snippets`) for rapid CRUD development:
+**VSCode Code Snippets**: Backend includes comprehensive VSCode snippets ([`clhoria-template/.vscode/crud.code-snippets`](clhoria-template/.vscode/crud.code-snippets)) for rapid CRUD development:
 - `crud-schema` - Complete schema.ts template
 - `crud-routes` - Complete routes.ts template (all 5 CRUD routes)
 - `crud-handlers` - Complete handlers.ts template (all 5 CRUD handlers)
@@ -415,6 +418,15 @@ VITE_TEST_TOKEN=  # Optional: test JWT token for development
 - Player state in Zustand devtools (if installed)
 
 ## Documentation References
+
+### CLAUDE.md Hierarchy
+
+This repository uses a hierarchical documentation system:
+- **Root CLAUDE.md** (this file) - Cross-project overview, workflows, and quick reference
+- **Backend CLAUDE.md** ([clhoria-template/CLAUDE.md](clhoria-template/CLAUDE.md)) - Backend-specific architecture, coding standards, and rules
+- Each project may have its own README for setup instructions
+
+### Key Documentation Files
 
 - Backend: [clhoria-template/CLAUDE.md](clhoria-template/CLAUDE.md) - Comprehensive backend architecture and coding standards
 - Backend README: [clhoria-template/README.md](clhoria-template/README.md) - Setup and deployment

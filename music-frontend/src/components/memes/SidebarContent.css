@@ -16,20 +16,29 @@
   padding-left: 8px;
 }
 
+/* SidebarContent.css */
+
 .placeholder-list {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  flex-direction: row;      /* ✅ 改为横向 */
+  flex-wrap: wrap;            /* ✅ 允许换行 */
+  gap: 8px;                   /* 间距稍大 */
+  align-content: flex-start;  /* 顶部对齐 */
 }
 
 .placeholder-item {
-  padding: 10px 12px;
-  border-radius: 6px;
-  font-size: 14px;
+  padding: 6px 12px;        /* 减小上下padding */
+  border-radius: 16px;      /* 圆角pill形状 */
+  font-size: 13px;
   color: #666;
   background: #f5f5f5;
   cursor: pointer;
   transition: all 0.2s;
+
+  /* 关键：不独占一行 */
+  width: auto;              /* 根据内容自适应宽度 */
+  white-space: nowrap;        /* 不换行 */
+  flex-shrink: 0;           /* 不压缩 */
 }
 
 .placeholder-item:hover {

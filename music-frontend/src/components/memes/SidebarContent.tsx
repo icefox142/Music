@@ -3,6 +3,7 @@
  * Memes Sidebar Content Component
  */
 
+import { useEmojiTags } from "@/hooks/useEmojisMock";
 import "./SidebarContent.css";
 
 interface SidebarContentProps {
@@ -10,15 +11,15 @@ interface SidebarContentProps {
   selectedTags?: string[];
 }
 
-const AVAILABLE_TAGS = ["热门", "搞笑", "可爱", "表情", "动物"];
-
 export function SidebarContent({ onTagSelect, selectedTags = [] }: SidebarContentProps) {
+  const { tags } = useEmojiTags();
+
   return (
     <>
       <div className="sidebar-section">
         <h3>标签筛选</h3>
         <div className="placeholder-list">
-          {AVAILABLE_TAGS.map((tag) => (
+          {tags.map((tag) => (
             <div
               key={tag}
               className={`placeholder-item ${selectedTags.includes(tag) ? "active" : ""}`}
