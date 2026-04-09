@@ -1,0 +1,237 @@
+/* 音量控制容器 */
+.volume-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  outline: none;
+}
+
+.volume-control:focus-visible {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* 音量标签 */
+.volume-label {
+  font-size: 12px;
+  color: #666;
+  min-width: 35px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 静音按钮 */
+.volume-mute-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: #f3f4f6;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+
+.volume-mute-btn:hover {
+  background: #e5e7eb;
+  transform: scale(1.05);
+}
+
+.volume-mute-btn:active {
+  transform: scale(0.95);
+}
+
+/* 滑块容器 */
+.volume-slider-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s;
+}
+
+.volume-control:hover .volume-slider-wrapper,
+.volume-control.show-slider .volume-slider-wrapper {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 快速调节按钮 */
+.volume-adjust-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: #e5e7eb;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  color: #6b7280;
+  transition: all 0.2s;
+}
+
+.volume-adjust-btn:hover:not(:disabled) {
+  background: #d1d5db;
+  color: #374151;
+}
+
+.volume-adjust-btn:active:not(:disabled) {
+  transform: scale(0.9);
+}
+
+.volume-adjust-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* 音量滑块 - 水平 */
+.volume-slider-horizontal {
+  position: relative;
+  width: 100px;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.volume-slider-horizontal:hover {
+  height: 8px;
+}
+
+/* 音量滑块 - 垂直 */
+.volume-slider-vertical {
+  position: relative;
+  width: 6px;
+  height: 100px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.volume-slider-vertical:hover {
+  width: 8px;
+}
+
+/* 音量填充 */
+.volume-fill {
+  position: relative;
+  background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+  border-radius: 3px;
+  transition: width 0.1s, height 0.1s;
+}
+
+.volume-slider-vertical .volume-fill {
+  background: linear-gradient(180deg, #6366f1 0%, #8b5cf6 100%);
+}
+
+/* 拖动点 */
+.volume-thumb {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border: 2px solid #8b5cf6;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transform: translate(-50%, 50%);
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.volume-slider:hover .volume-thumb {
+  opacity: 1;
+}
+
+.volume-thumb:hover {
+  transform: translate(-50%, 50%) scale(1.2);
+}
+
+.volume-slider:active .volume-thumb {
+  opacity: 1;
+  transform: translate(-50%, 50%) scale(1.1);
+}
+
+/* 垂直布局特殊样式 */
+.volume-control-vertical {
+  flex-direction: column;
+  height: 150px;
+  padding: 8px;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+.volume-control-vertical .volume-slider-wrapper {
+  flex-direction: column;
+  opacity: 1;
+  visibility: visible;
+}
+
+.volume-control-vertical .volume-mute-btn {
+  order: 2;
+  margin-top: 8px;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .volume-slider-horizontal {
+    width: 80px;
+  }
+
+  .volume-mute-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+
+  .volume-adjust-btn {
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
+  }
+}
+
+/* 快捷键提示 */
+.volume-control[title]::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  background: #1f2937;
+  color: #fff;
+  font-size: 11px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  margin-bottom: 4px;
+}
+
+.volume-control:hover[title]::after {
+  opacity: 1;
+}
+
+/* 动画 */
+@keyframes volumePulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.volume-mute-btn:active {
+  animation: volumePulse 0.2s ease-in-out;
+}

@@ -6,18 +6,164 @@
 .music-page {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 100vh;
   overflow: hidden;
+  background: #f9fafb;
 }
 
+/* 内容区域 */
 .music-content {
   flex: 1;
   overflow-y: auto;
-  padding: 24px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
 }
 
+/* 页面头部 */
+.music-header {
+  padding: 24px 32px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.music-header h1 {
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.music-header p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* 主内容区 */
+.music-main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  padding: 24px 32px;
+  overflow: hidden;
+}
+
+/* 区块通用样式 */
+.music-section {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.song-count {
+  font-size: 12px;
+  color: #6b7280;
+  background: #e5e7eb;
+  padding: 4px 10px;
+  border-radius: 10px;
+}
+
+/* 歌曲列表区 */
+.song-list-section {
+  overflow: hidden;
+}
+
+/* 移除 .song-list 样式，让组件自己管理 */
+/* .song-list 样式已在 SongList.css 中定义 */
+
+/* 歌词区 */
+.lyrics-section {
+  overflow: hidden;
+}
+
+.lyrics-wrapper {
+  flex: 1;
+  overflow: hidden;
+  background: linear-gradient(180deg, #fafafa 0%, #fff 100%);
+}
+
+.lyrics-panel {
+  height: 100%;
+  border: none;
+  border-radius: 0;
+}
+
+/* 底部播放器 */
 .music-player-wrapper {
   flex-shrink: 0;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid #e5e7eb;
   background: #fff;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
 }
+
+.music-player-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* 响应式设计 */
+@media (max-width: 1024px) {
+  .music-main {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+
+  .music-section {
+    max-height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .music-header {
+    padding: 20px 24px;
+  }
+
+  .music-header h1 {
+    font-size: 24px;
+  }
+
+  .music-main {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  /* 移除歌曲相关的响应式样式，由组件自己管理 */
+
+  .section-header {
+    padding: 12px 16px;
+  }
+
+  .section-header h2 {
+    font-size: 16px;
+  }
+
+  .music-player-container {
+    padding: 0 16px;
+  }
+}
+
+/* 移除组件级样式，由组件自己管理 */
+/* .song-item 动画已在 SongList.css 中定义 */
+

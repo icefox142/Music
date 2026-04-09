@@ -1,0 +1,110 @@
+/* 进度条容器 */
+.progress-bar-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  user-select: none;
+}
+
+/* 时间标签 */
+.time-label {
+  font-size: 12px;
+  color: #666;
+  min-width: 40px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.time-current {
+  color: #333;
+}
+
+.time-duration {
+  color: #999;
+}
+
+/* 进度条 */
+.progress-bar {
+  position: relative;
+  flex: 1;
+  height: 6px;
+  background: #e0e0e0;
+  border-radius: 3px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: height 0.2s;
+}
+
+.progress-bar:hover {
+  height: 8px;
+}
+
+/* 缓冲进度 */
+.progress-buffer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: #c0c0c0;
+  transition: width 0.3s;
+}
+
+/* 播放进度 */
+.progress-fill {
+  position: relative;
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+  border-radius: 3px;
+  transition: width 0.1s linear;
+}
+
+/* 拖动点 */
+.progress-thumb {
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border: 2px solid #8b5cf6;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.progress-bar:hover .progress-thumb {
+  opacity: 1;
+}
+
+.progress-thumb:hover {
+  transform: translateY(-50%) scale(1.2);
+}
+
+/* 激活状态（拖动时） */
+.progress-bar:active .progress-thumb {
+  opacity: 1;
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .progress-bar-container {
+    gap: 8px;
+  }
+
+  .time-label {
+    font-size: 11px;
+    min-width: 35px;
+  }
+
+  .progress-bar {
+    height: 4px;
+  }
+
+  .progress-bar:hover {
+    height: 6px;
+  }
+}

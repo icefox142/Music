@@ -1,0 +1,258 @@
+/**
+ * 增强的音乐播放器样式
+ * Enhanced music player styles
+ */
+
+.enhanced-music-player {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: linear-gradient(180deg, #fafafa 0%, #fff 100%);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* 空状态 */
+.enhanced-music-player.empty {
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #9ca3af;
+}
+
+.empty-icon {
+  font-size: 32px;
+}
+
+.empty-state p {
+  font-size: 14px;
+  margin: 0;
+  color: #6b7280;
+}
+
+.empty-state small {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+/* 歌曲信息 */
+.player-song-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.album-cover {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s;
+}
+
+.album-cover:hover {
+  transform: scale(1.05);
+}
+
+.album-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.track-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.track-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 4px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.track-artist {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 进度条区域 */
+.player-progress {
+  display: flex;
+  align-items: center;
+}
+
+/* 控制区域 */
+.player-controls-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 8px;
+}
+
+/* 播放控制 */
+.playback-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.playback-controls button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.playback-controls button:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #8b5cf6;
+  transform: scale(1.05);
+}
+
+.playback-controls button:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.playback-controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* 播放模式 */
+.play-modes {
+  display: flex;
+  gap: 4px;
+  background: #f3f4f6;
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.play-mode-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #6b7280;
+}
+
+.play-mode-btn:hover {
+  background: #e5e7eb;
+}
+
+.play-mode-btn.active {
+  background: #8b5cf6;
+  color: #fff;
+}
+
+/* 音量控制 */
+.player-volume {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* 状态信息 */
+.player-status {
+  display: flex;
+  align-items: center;
+}
+
+.song-position {
+  font-size: 12px;
+  color: #6b7280;
+  font-variant-numeric: tabular-nums;
+  padding: 4px 8px;
+  background: #f3f4f6;
+  border-radius: 6px;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .enhanced-music-player {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .player-song-info {
+    gap: 8px;
+  }
+
+  .album-cover {
+    width: 48px;
+    height: 48px;
+  }
+
+  .track-title {
+    font-size: 14px;
+  }
+
+  .track-artist {
+    font-size: 12px;
+  }
+
+  .player-controls-section {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .play-modes {
+    order: 3;
+  }
+
+  .player-volume {
+    flex: auto;
+    order: 2;
+  }
+
+  .player-status {
+    display: none;
+  }
+}
+
+/* 动画 */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.player-song-info {
+  animation: slideUp 0.3s ease-out;
+}

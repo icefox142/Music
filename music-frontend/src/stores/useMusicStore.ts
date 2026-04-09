@@ -26,8 +26,19 @@ interface MusicPlayerState {
   // 操作方法
   setCurrentSong: (song: Song | null) => void;
   setPlaylist: (songs: Song[]) => void;
-  playSong: (song: Song, playlist?: Song[]) => void;
+
+  // 场景1: 从歌单播放
+  replaceAndPlay: (songs: Song[], index: number) => void;
+  initializePlaylist: (songs: Song[]) => void;
+
+  // 场景2: 从播放列表播放
   playSongAtIndex: (index: number) => void;
+
+  // 场景3: 单曲插入播放
+  insertAndPlay: (song: Song) => void;
+
+  // 基础方法
+  playSong: (song: Song) => void;
   togglePlay: () => void;
   nextSong: () => void;
   prevSong: () => void;
@@ -54,38 +65,27 @@ export const useMusicStore = create<MusicPlayerState>()(
       // 设置播放列表
       setPlaylist: (songs) => set({ playlist: songs }),
 
-      // 播放指定歌曲（可选择是否更新播放列表）
-      playSong: (song, playlist) => {
-        const state = get();
+      // 场景1: 从歌单播放 - 替换整个播放列表并播放指定歌曲
+      replaceAndPlay: (songs, index) => {
+        const targetIndex = Math.max(0, Math.min(index, songs.length - 1));
+        set({
+          playlist: songs,
+          currentIndex: targetIndex,
+          currentSong: songs[targetIndex],
+          isPlaying: true,
+        });
+      },
 
-        if (playlist) {
-          const index = playlist.findIndex((s) => s.id === song.id);
-          set({
-            playlist,
-            currentSong: song,
-            currentIndex: index >= 0 ? index : 0,
-            isPlaying: true,
-          });
-        } else {
-          // 在当前播放列表中查找
-          const index = state.playlist.findIndex((s) => s.id === song.id);
-          if (index >= 0) {
-            set({
-              currentSong: song,
-              currentIndex: index,
-              isPlaying: true,
-            });
-          } else {
-            // 不在列表中，单独播放
-            set({
-              currentSong: song,
-              isPlaying: true,
-            });
-          }
+      // 初始化播放列表（只在首次加载时调用）
+      initializePlaylist: (songs) => {
+        const state = get();
+        // 只有在播放列表为空时才初始化
+        if (state.playlist.length === 0) {
+          set({ playlist: songs });
         }
       },
 
-      // 播放指定索引的歌曲
+      // 场景2: 从播放列表直接播放 - 只改变索引
       playSongAtIndex: (index) => {
         const state = get();
         if (index >= 0 && index < state.playlist.length) {
@@ -94,6 +94,48 @@ export const useMusicStore = create<MusicPlayerState>()(
             currentIndex: index,
             isPlaying: true,
           });
+        }
+      },
+
+      // 场景3: 单曲插入播放 - 如果不在列表中则插入到开头
+      insertAndPlay: (song) => {
+        const state = get();
+        const index = state.playlist.findIndex((s) => s.id === song.id);
+
+        if (index >= 0) {
+          // 歌曲已在列表中，直接播放
+          set({
+            currentIndex: index,
+            currentSong: state.playlist[index],
+            isPlaying: true,
+          });
+        } else {
+          // 歌曲不在列表中，插入到开头
+          const newPlaylist = [song, ...state.playlist];
+          set({
+            playlist: newPlaylist,
+            currentIndex: 0,
+            currentSong: song,
+            isPlaying: true,
+          });
+        }
+      },
+
+      // 播放指定歌曲（通用方法）
+      playSong: (song) => {
+        const state = get();
+
+        // 在当前播放列表中查找
+        const index = state.playlist.findIndex((s) => s.id === song.id);
+        if (index >= 0) {
+          set({
+            currentSong: song,
+            currentIndex: index,
+            isPlaying: true,
+          });
+        } else {
+          // 歌曲不在播放列表中，使用插入播放
+          get().insertAndPlay(song);
         }
       },
 
