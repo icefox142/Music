@@ -4,7 +4,7 @@
  */
 
 import type { Song } from "@/types/api";
-import { MusicGenre, MusicLanguage } from "@/types/api";
+import { useMusicStore } from "@/stores/useMusicStore";
 import "./SongList.css";
 
 interface SongListProps {
@@ -14,51 +14,12 @@ interface SongListProps {
 }
 
 export function SongList({ songs, onSongSelect, selectedSongId }: SongListProps) {
+  // 从 store 获取播放状态
+  const { isPlaying } = useMusicStore();
   const handleSongClick = (song: Song) => {
     if (onSongSelect) {
       onSongSelect(song);
     }
-  };
-
-  // 格式化音乐类型
-  const formatGenre = (genre: MusicGenre): string => {
-    const genreMap: Record<MusicGenre, string> = {
-      [MusicGenre.POP]: "流行",
-      [MusicGenre.ROCK]: "摇滚",
-      [MusicGenre.HIP_HOP]: "嘻哈",
-      [MusicGenre.RNB]: "R&B",
-      [MusicGenre.JAZZ]: "爵士",
-      [MusicGenre.CLASSICAL]: "古典",
-      [MusicGenre.ELECTRONIC]: "电子",
-      [MusicGenre.COUNTRY]: "乡村",
-      [MusicGenre.REGGAE]: "雷鬼",
-      [MusicGenre.BLUES]: "蓝调",
-      [MusicGenre.METAL]: "金属",
-      [MusicGenre.FOLK]: "民谣",
-      [MusicGenre.LATIN]: "拉丁",
-      [MusicGenre.ASIAN_POP]: "华语流行",
-      [MusicGenre.OTHER]: "其他",
-    };
-    return genreMap[genre] || genre;
-  };
-
-  // 格式化语言
-  const formatLanguage = (language: MusicLanguage): string => {
-    const languageMap: Record<MusicLanguage, string> = {
-      [MusicLanguage.CHINESE]: "中文",
-      [MusicLanguage.ENGLISH]: "英文",
-      [MusicLanguage.JAPANESE]: "日语",
-      [MusicLanguage.KOREAN]: "韩语",
-      [MusicLanguage.FRENCH]: "法语",
-      [MusicLanguage.SPANISH]: "西班牙语",
-      [MusicLanguage.GERMAN]: "德语",
-      [MusicLanguage.ITALIAN]: "意大利语",
-      [MusicLanguage.PORTUGUESE]: "葡萄牙语",
-      [MusicLanguage.RUSSIAN]: "俄语",
-      [MusicLanguage.INSTRUMENTAL]: "纯音乐",
-      [MusicLanguage.OTHER]: "其他",
-    };
-    return languageMap[language] || language;
   };
 
   if (songs.length === 0) {
@@ -73,8 +34,13 @@ export function SongList({ songs, onSongSelect, selectedSongId }: SongListProps)
 
   return (
     <div className="song-list-container">
-      <h2>歌曲列表</h2>
+      <div className="list-header">
+        <span className="col-title">歌曲</span>
+        <span className="col-artist">作者</span>
+        <span className="col-duration">时长</span>
+      </div>
       <div className="song-list">
+        {/* 歌曲列表 */}
         {songs.map((song: Song, index: number) => {
           const isActive = selectedSongId === song.id;
 
@@ -84,10 +50,24 @@ export function SongList({ songs, onSongSelect, selectedSongId }: SongListProps)
               className={`song-item ${isActive ? "active" : ""}`}
               onClick={() => handleSongClick(song)}
             >
+              {/* 第1列：歌曲名称 + 序号/播放图标 */}
               <div className="song-index">
                 {isActive ? (
-                  <span className="playing-icon">▶️</span>
+                  // 根据播放状态显示不同图标
+                  isPlaying ? (
+                    // 正在播放：CSS 动画播放指示器（三个跳动的小条）
+                    <div className="playing-icon">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  ) : (
+                    // 已暂停：显示暂停图标
+                    <span className="track-number">{index + 1}</span>
+                  )
                 ) : (
+                  // 未激活：显示序号
                   <span className="track-number">{index + 1}</span>
                 )}
               </div>
@@ -103,12 +83,9 @@ export function SongList({ songs, onSongSelect, selectedSongId }: SongListProps)
 
               <div className="song-info">
                 <div className="song-title">{song.title}</div>
-                <div className="song-meta">
+                <div className="song-artist">
                   <span className="artist-name">{song.artist}</span>
-                  <span className="separator">·</span>
-                  <span className="genre-tag">{formatGenre(song.genre)}</span>
-                  <span className="separator">·</span>
-                  <span className="language-tag">{formatLanguage(song.language)}</span>
+
                 </div>
               </div>
 

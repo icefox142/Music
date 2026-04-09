@@ -19,6 +19,42 @@
   background: #f9fafb;
 }
 
+/* 表头 */
+.list-header {
+  position: relative;
+  height: 40px;
+  padding: 0 16px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+  font-size: 12px;
+  color: #888;
+  font-weight: 500;
+}
+
+/* 表头-歌曲：25%位置，右对齐 */
+.list-header .col-title {
+  position: absolute;
+  left: 30%;
+  top: 50%;
+  transform: translate(-100%, -50%);
+}
+
+/* 表头-歌手：60%位置，居中 */
+.list-header .col-artist {
+  position: absolute;
+  left: 60%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* 表头-时长：90%位置，右对齐 */
+.list-header .col-duration {
+  position: absolute;
+  left: 90%;
+  top: 50%;
+  transform: translate(-100%, -50%);
+}
+
 .song-list {
   flex: 1;
   overflow-y: auto;
@@ -64,10 +100,6 @@
   color: #9ca3af;
 }
 
-.song-list-state.error-state p {
-  color: #dc2626;
-}
-
 /* 歌曲项样式 */
 .song-item {
   display: grid;
@@ -108,6 +140,7 @@
 }
 
 /* 序号 */
+/* 序号 */
 .song-index {
   display: flex;
   align-items: center;
@@ -115,8 +148,62 @@
   font-size: 14px;
   color: #9ca3af;
   font-weight: 500;
+  width: 24px;
 }
 
+.track-number {
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+/* 🔥 播放动画图标 - 三个跳动的小条 */
+.playing-icon {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2px;
+  height: 16px;
+  width: 24px;
+}
+
+.playing-icon span {
+  width: 3px;
+  background: #7c3aed;
+  border-radius: 2px;
+  animation: sound-bars 1s ease-in-out infinite;
+}
+
+/* 三个条不同高度和延迟，形成波浪效果 */
+.playing-icon span:nth-child(1) {
+  height: 8px;
+  animation-delay: 0s;
+}
+
+.playing-icon span:nth-child(2) {
+  height: 14px;
+  animation-delay: 0.2s;
+}
+
+.playing-icon span:nth-child(3) {
+  height: 10px;
+  animation-delay: 0.4s;
+}
+
+/* 跳动动画 */
+@keyframes sound-bars {
+  0%, 100% {
+    height: 4px;
+  }
+  50% {
+    height: 16px;
+  }
+}
+
+/* 暂停状态（可选） */
+.song-item:not(.active) .playing-icon span {
+  animation: none;
+  height: 4px;
+}
 .playing-icon {
   font-size: 18px;
   color: #7c3aed;
@@ -171,55 +258,27 @@
   background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
 }
 
-.playing-indicator {
-  position: absolute;
-  bottom: 2px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 2px;
-}
 
-.playing-indicator::before,
-.playing-indicator::after {
-  content: "";
-  width: 3px;
-  height: 8px;
-  background: #8b5cf6;
-  border-radius: 2px;
-  animation: bounce 1s ease-in-out infinite;
-}
-
-.playing-indicator::after {
-  animation-delay: 0.2s;
-}
-
-@keyframes bounce {
-  0%,
-  100% {
-    height: 4px;
-  }
-  50% {
-    height: 12px;
-  }
-}
-
-/* 歌曲信息 */
+/* 歌曲信息 - 横向布局，定位子元素 */
 .song-info {
+  position: relative;
   min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  height: 100%;
 }
 
+/* 歌曲名 - 25%位置，右对齐 */
 .song-title {
+  position: absolute;
+  left: 5%;
+  top: 50%;
+  transform: translate(0, -50%);
   font-size: 14px;
   font-weight: 500;
   color: #1f2937;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
-  line-height: 1.4;
+  max-width: 200px;
 }
 
 .song-item.active .song-title {
@@ -227,45 +286,29 @@
   font-weight: 600;
 }
 
-.song-meta {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
+/* 歌手 - 60%位置，居中 */
+.song-artist {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(0, -50%);
+  font-size: 13px;
   color: #6b7280;
-  flex-wrap: nowrap;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
 }
 
-.artist-name {
-  font-weight: 500;
-  color: #374151;
-}
-
-.separator {
-  color: #d1d5db;
-}
-
-.genre-tag,
-.language-tag {
-  padding: 2px 6px;
-  background: #f3f4f6;
-  border-radius: 4px;
-  font-size: 11px;
-  color: #6b7280;
-}
-
-.song-item.active .genre-tag,
-.song-item.active .language-tag {
-  background: #ddd6fe;
+.song-item.active .song-artist {
   color: #7c3aed;
 }
 
-/* 操作区域 */
+/* 时长 */
 .song-actions {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 8px;
 }
 
 .song-duration {
