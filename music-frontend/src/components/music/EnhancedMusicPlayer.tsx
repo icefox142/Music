@@ -23,23 +23,11 @@ export function EnhancedMusicPlayer({ className = "" }: EnhancedMusicPlayerProps
     setPlayMode,
   } = useMusic();
 
-  if (!currentSong) {
-    return (
-      <div className={`enhanced-music-player empty ${className}`}>
-        <div className="empty-state">
-          <span className="empty-icon">🎵</span>
-          <p>未选择歌曲</p>
-          <small>从列表中选择歌曲开始播放</small>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className={`enhanced-music-player ${className}`}>
       {/* 歌曲信息 */}
       <div className="player-song-info">
-        {currentSong.coverUrl && (
+        {currentSong?.coverUrl && (
           <img
             src={currentSong.coverUrl}
             alt={currentSong.title}
@@ -47,8 +35,8 @@ export function EnhancedMusicPlayer({ className = "" }: EnhancedMusicPlayerProps
           />
         )}
         <div className="track-details">
-          <h3 className="track-title">{currentSong.title}</h3>
-          <p className="track-artist">{currentSong.artist}</p>
+          <h3 className="track-title">{currentSong?.title || "未选择歌曲"}</h3>
+          <p className="track-artist">{currentSong?.artist || "从列表中选择歌曲"}</p>
         </div>
       </div>
 
@@ -65,7 +53,7 @@ export function EnhancedMusicPlayer({ className = "" }: EnhancedMusicPlayerProps
         <div className="playback-controls">
           <button
             onClick={prevSong}
-            disabled={playlist.length === 0}
+            disabled={!currentSong || playlist.length === 0}
             aria-label="上一首"
             title="上一首"
           >
@@ -74,6 +62,7 @@ export function EnhancedMusicPlayer({ className = "" }: EnhancedMusicPlayerProps
 
           <button
             onClick={togglePlay}
+            disabled={!currentSong}
             aria-label={isPlaying ? "暂停" : "播放"}
             title={isPlaying ? "暂停" : "播放"}
           >
@@ -82,7 +71,7 @@ export function EnhancedMusicPlayer({ className = "" }: EnhancedMusicPlayerProps
 
           <button
             onClick={nextSong}
-            disabled={playlist.length === 0}
+            disabled={!currentSong || playlist.length === 0}
             aria-label="下一首"
             title="下一首"
           >

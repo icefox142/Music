@@ -54,9 +54,9 @@
 .music-main {
   flex: 1;
   display: grid;
-  grid-template-columns: 3fr 1fr; /* 75% 歌单，25% 歌词 */
-  gap: 24px;
-  padding: 24px 32px;
+  grid-template-columns: 4fr 1fr; /* 80% 歌单，20% 歌词 */
+  gap: 0;
+  padding: 0;
   overflow: hidden;
   min-height: 0; /* 关键：允许 grid 子项缩小 */
 }
@@ -155,8 +155,9 @@
     overflow-y: auto;
   }
 
-  .music-section {
-    max-height: 400px;
+  /* 隐藏歌词组件，保持歌单组件全宽 */
+  .lyrics-panel-wrapper {
+    display: none;
   }
 }
 

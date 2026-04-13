@@ -97,16 +97,6 @@ export function SongList({ songs, onSongSelect, selectedSongId }: SongListProps)
                 )}
               </div>
 
-              {/* 封面 */}
-              <div className="song-cover">
-                {song.coverUrl ? (
-                  <img src={song.coverUrl} alt={song.title} />
-                ) : (
-                  <div className="cover-placeholder">🎵</div>
-                )}
-                <div className="cover-overlay">▶</div>
-              </div>
-
               {/* 歌曲信息（标题） */}
               <div className="song-info">
                 <div className="song-title">{song.title}</div>

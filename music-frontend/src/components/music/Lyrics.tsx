@@ -32,7 +32,7 @@ export function Lyrics({ songId, lyrics: propLyrics, className = "" }: LyricsPro
   const [centerLineCount, setCenterLineCount] = useState(2);
   const containerRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
-  const LINE_HEIGHT = 40;
+  const LINE_HEIGHT = 32;
 
   const { data: lyricsLRC } = useLyricsMock(songId);
   const { data: song } = useSongMock(songId || "");
@@ -110,13 +110,6 @@ export function Lyrics({ songId, lyrics: propLyrics, className = "" }: LyricsPro
     }
   };
 
-  // 格式化时间标签
-  const formatTime = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, "0")}`;
-  };
-
   if (finalLyrics.length === 0 || (finalLyrics.length === 1 && finalLyrics[0].text === "暂无歌词")) {
     
     return (
@@ -154,7 +147,6 @@ export function Lyrics({ songId, lyrics: propLyrics, className = "" }: LyricsPro
               className={`lyrics-line ${index === activeIndex ? "active" : ""}`}
               onClick={() => handleLineClick(line.time)}
             >
-              <span className="lyrics-time">{formatTime(line.time)}</span>
               <span className="lyrics-text">{line.text}</span>
             </div>
           ))}
