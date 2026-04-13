@@ -1,0 +1,153 @@
+/**
+ * 主题变量定义
+ * Theme CSS variables
+ */
+
+/* ===== 浅色模式 ===== */
+:root {
+  /* ===== 基础颜色 ===== */
+  --text: #6b6375;
+  --text-h: #08060d;
+  --text-secondary: #9ca3af;
+  --bg: #fff;
+  --bg-secondary: #f9fafb;
+  --bg-tertiary: #f3f4f6;
+  --border: #e5e4e7;
+  --border-light: #f0f0f0;
+
+  /* ===== 强调色 ===== */
+  --accent: #aa3bff;
+  --accent-hover: #8b5cf6;
+  --accent-bg: rgba(170, 59, 255, 0.1);
+  --accent-border: rgba(170, 59, 255, 0.5);
+
+  /* ===== 功能色 ===== */
+  --code-bg: #f4f3ec;
+  --social-bg: rgba(244, 243, 236, 0.5);
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+
+  /* ===== 音乐播放器颜色 ===== */
+  --music-bg: #ffffff;
+  --music-bg-gradient: linear-gradient(180deg, #fafafa 0%, #fff 100%);
+  --music-card-bg: #ffffff;
+  --music-card-hover: #f9fafb;
+  --music-text-primary: #1f2937;
+  --music-text-secondary: #6b7280;
+  --music-text-tertiary: #9ca3af;
+  --music-border: #e5e7eb;
+  --music-progress-bg: #e5e7eb;
+  --music-progress-fill: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%);
+  --music-button-bg: #ffffff;
+  --music-button-hover: #f9fafb;
+  --music-button-border: #e5e7eb;
+  --music-mode-bg: #f3f4f6;
+  --music-mode-hover: #e5e7eb;
+  --music-mode-active: #8b5cf6;
+
+  /* ===== 阴影 ===== */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow:
+    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  /* ===== 字体 ===== */
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  color-scheme: light;
+}
+
+/* ===== 深色模式 ===== */
+[data-theme="dark"] {
+  /* ===== 基础颜色 ===== */
+  --text: #9ca3af;
+  --text-h: #f3f4f6;
+  --text-secondary: #6b7280;
+  --bg: #16171d;
+  --bg-secondary: #1f2028;
+  --bg-tertiary: #2e303a;
+  --border: #2e303a;
+  --border-light: #374151;
+
+  /* ===== 强调色 ===== */
+  --accent: #c084fc;
+  --accent-hover: #a855f7;
+  --accent-bg: rgba(192, 132, 252, 0.15);
+  --accent-border: rgba(192, 132, 252, 0.5);
+
+  /* ===== 功能色 ===== */
+  --code-bg: #1f2028;
+  --social-bg: rgba(47, 48, 58, 0.5);
+  --shadow:
+    rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+
+  /* ===== 音乐播放器颜色 ===== */
+  --music-bg: #1f2028;
+  --music-bg-gradient: linear-gradient(180deg, #1a1b23 0%, #1f2028 100%);
+  --music-card-bg: #2e303a;
+  --music-card-hover: #374151;
+  --music-text-primary: #f3f4f6;
+  --music-text-secondary: #9ca3af;
+  --music-text-tertiary: #6b7280;
+  --music-border: #374151;
+  --music-progress-bg: #374151;
+  --music-progress-fill: linear-gradient(90deg, #a855f7 0%, #9333ea 100%);
+  --music-button-bg: #2e303a;
+  --music-button-hover: #374151;
+  --music-button-border: #4b5563;
+  --music-mode-bg: #2e303a;
+  --music-mode-hover: #374151;
+  --music-mode-active: #a855f7;
+
+  color-scheme: dark;
+}
+
+/* ===== 自动适配系统主题 ===== */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) {
+    /* ===== 基础颜色 ===== */
+    --text: #9ca3af;
+    --text-h: #f3f4f6;
+    --text-secondary: #6b7280;
+    --bg: #16171d;
+    --bg-secondary: #1f2028;
+    --bg-tertiary: #2e303a;
+    --border: #2e303a;
+    --border-light: #374151;
+
+    /* ===== 强调色 ===== */
+    --accent: #c084fc;
+    --accent-hover: #a855f7;
+    --accent-bg: rgba(192, 132, 252, 0.15);
+    --accent-border: rgba(192, 132, 252, 0.5);
+
+    /* ===== 功能色 ===== */
+    --code-bg: #1f2028;
+    --social-bg: rgba(47, 48, 58, 0.5);
+    --shadow:
+      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+
+    /* ===== 音乐播放器颜色 ===== */
+    --music-bg: #1f2028;
+    --music-bg-gradient: linear-gradient(180deg, #1a1b23 0%, #1f2028 100%);
+    --music-card-bg: #2e303a;
+    --music-card-hover: #374151;
+    --music-text-primary: #f3f4f6;
+    --music-text-secondary: #9ca3af;
+    --music-text-tertiary: #6b7280;
+    --music-border: #374151;
+    --music-progress-bg: #374151;
+    --music-progress-fill: linear-gradient(90deg, #a855f7 0%, #9333ea 100%);
+    --music-button-bg: #2e303a;
+    --music-button-hover: #374151;
+    --music-button-border: #4b5563;
+    --music-mode-bg: #2e303a;
+    --music-mode-hover: #374151;
+    --music-mode-active: #a855f7;
+
+    color-scheme: dark;
+  }
+}

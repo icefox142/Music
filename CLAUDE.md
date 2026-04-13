@@ -167,15 +167,17 @@ pnpm lint              # ESLint
 
 ### Client Frontend (music-frontend)
 
-**Stack**: Vite + React 19 + React Router + TanStack Query + Zustand + Howler.js + Tailwind CSS
+**Stack**: Vite + React 19 + React Router + TanStack Query + SWR + Zustand + Tailwind CSS
 
 **Key Features**:
 - React Router for client-side routing
 - TanStack Query (React Query) for server state management
+- SWR for alternative data fetching patterns
 - Zustand for client state management (music player, playlists)
-- Howler.js for audio playback
 - Custom API client layer in `src/api/`
 - JWT authentication via localStorage
+
+**Note**: Audio playback implementation is in progress. Player state is managed via Zustand but actual audio playback needs to be implemented.
 
 **Architecture**:
 - `src/api/` - Auto-generated API clients using custom generators

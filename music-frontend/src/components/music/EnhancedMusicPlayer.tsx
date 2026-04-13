@@ -15,7 +15,6 @@ export function EnhancedMusicPlayer({ className = "" }: EnhancedMusicPlayerProps
   const {
     currentSong,
     playlist,
-    currentIndex,
     isPlaying,
     playMode,
     togglePlay,
@@ -53,13 +52,15 @@ export function EnhancedMusicPlayer({ className = "" }: EnhancedMusicPlayerProps
         </div>
       </div>
 
-      {/* 进度条 */}
-      <div className="player-progress">
-        <ProgressBar />
-      </div>
+      {/* 进度条和控制区域 - 并列显示 */}
+      <div className="player-controls-row">
+        {/* 进度条 */}
+        <div className="player-progress">
+          <ProgressBar />
+        </div>
 
-      {/* 控制区域 */}
-      <div className="player-controls-section">
+        {/* 控制区域 */}
+        <div className="player-controls-section">
         {/* 播放控制 */}
         <div className="playback-controls">
           <button
@@ -129,13 +130,7 @@ export function EnhancedMusicPlayer({ className = "" }: EnhancedMusicPlayerProps
         <div className="player-volume">
           <VolumeControl orientation="horizontal" showLabel={false} />
         </div>
-
-        {/* 歌曲信息 */}
-        <div className="player-status">
-          <span className="song-position">
-            {currentIndex + 1} / {playlist.length}
-          </span>
-        </div>
+      </div>
       </div>
     </div>
   );
