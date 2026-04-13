@@ -7,6 +7,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Link } from "react-router-dom";
 
 import { AppRoutes } from "./routes";
+import { ThemeProvider } from "./components/ThemeProvider";
+import { ThemeToggle } from "./components/ThemeToggle";
 import "./App.css";
 import "./components/sidebar.css";
 
@@ -23,8 +25,9 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <div className="app">
+      <ThemeProvider>
+        <BrowserRouter>
+          <div className="app">
           {/* 顶部导航栏 */}
           <header className="app-header">
             {/* 左侧：Logo + 主导航 */}
@@ -49,8 +52,9 @@ function App() {
               </div>
             </div>
 
-            {/* 右侧：个人空间 */}
+            {/* 右侧：个人空间 + 主题切换 */}
             <div className="header-right">
+              <ThemeToggle />
               <Link to="/profile" className="profile-link">
                 <div className="avatar-placeholder">
                   {/* 圆形头像占位 */}
@@ -66,6 +70,7 @@ function App() {
           </main>
         </div>
       </BrowserRouter>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

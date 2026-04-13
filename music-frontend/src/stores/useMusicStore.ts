@@ -13,11 +13,25 @@ export type { Song };
 // 播放模式
 export type PlayMode = "sequence" | "shuffle" | "loop-one" | "loop-all";
 
+/**
+ * Fisher-Yates 洗牌算法
+ * 用于随机播放时打乱列表顺序
+ */
+function shufflePlaylist<T>(array: T[]): T[] {
+  const result = [...array];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
 // 播放器状态接口
 interface MusicPlayerState {
   // 当前播放
   currentSong: Song | null;
-  playlist: Song[];
+  playlist: Song[]; // 当前播放列表
+  originalPlaylist: Song[]; // 原始顺序列表（用于从随机模式恢复）
   currentIndex: number;
   isPlaying: boolean;
   volume: number;
@@ -54,6 +68,7 @@ export const useMusicStore = create<MusicPlayerState>()(
       // 初始状态
       currentSong: null,
       playlist: [],
+      originalPlaylist: [], // 原始列表初始化为空
       currentIndex: -1,
       isPlaying: false,
       volume: 0.7,
@@ -67,13 +82,38 @@ export const useMusicStore = create<MusicPlayerState>()(
 
       // 场景1: 从歌单播放 - 替换整个播放列表并播放指定歌曲
       replaceAndPlay: (songs, index) => {
+        console.log('🔄 replaceAndPlay 调用');
+        console.log('📋 歌曲数量:', songs.length);
+        console.log('📍 目标索引:', index);
+
         const targetIndex = Math.max(0, Math.min(index, songs.length - 1));
-        set({
+        const targetSong = songs[targetIndex];
+
+        console.log('🎵 播放歌曲:', targetSong?.title);
+        console.log('🎵 歌曲 ID:', targetSong?.id);
+        console.log('🔊 设置 isPlaying: true');
+
+        const newState = {
           playlist: songs,
+          originalPlaylist: songs, // 保存原始列表
           currentIndex: targetIndex,
-          currentSong: songs[targetIndex],
+          currentSong: targetSong,
           isPlaying: true,
-        });
+        };
+
+        console.log('📦 新状态:', newState);
+        set(newState);
+
+        // 立即检查状态是否更新
+        setTimeout(() => {
+          const currentState = get();
+          console.log('🔍 当前状态检查:');
+          console.log('  - currentSong:', currentState.currentSong?.title);
+          console.log('  - isPlaying:', currentState.isPlaying);
+          console.log('  - currentIndex:', currentState.currentIndex);
+        }, 0);
+
+        console.log('✅ replaceAndPlay 完成');
       },
 
       // 初始化播放列表（只在首次加载时调用）
@@ -81,7 +121,10 @@ export const useMusicStore = create<MusicPlayerState>()(
         const state = get();
         // 只有在播放列表为空时才初始化
         if (state.playlist.length === 0) {
-          set({ playlist: songs });
+          set({
+            playlist: songs,
+            originalPlaylist: songs, // 保存原始列表
+          });
         }
       },
 
@@ -114,6 +157,7 @@ export const useMusicStore = create<MusicPlayerState>()(
           const newPlaylist = [song, ...state.playlist];
           set({
             playlist: newPlaylist,
+            originalPlaylist: [song, ...state.originalPlaylist], // 同步更新原始列表
             currentIndex: 0,
             currentSong: song,
             isPlaying: true,
@@ -151,8 +195,10 @@ export const useMusicStore = create<MusicPlayerState>()(
 
         switch (state.playMode) {
           case "shuffle":
-            // 随机播放
-            nextIndex = Math.floor(Math.random() * state.playlist.length);
+            // 随机播放：按打乱后的列表顺序播放
+            if (nextIndex >= state.playlist.length) {
+              nextIndex = 0; // 播放完列表后循环
+            }
             break;
           case "loop-one":
             // 单曲循环，不切换
@@ -190,8 +236,10 @@ export const useMusicStore = create<MusicPlayerState>()(
 
         switch (state.playMode) {
           case "shuffle":
-            // 随机播放
-            prevIndex = Math.floor(Math.random() * state.playlist.length);
+            // 随机播放：按打乱后的列表顺序播放
+            if (prevIndex < 0) {
+              prevIndex = state.playlist.length - 1; // 循环到最后一首
+            }
             break;
           case "loop-one":
             // 单曲循环，不切换
@@ -224,12 +272,58 @@ export const useMusicStore = create<MusicPlayerState>()(
       setVolume: (volume) => set({ volume: Math.max(0, Math.min(1, volume)) }),
 
       // 设置播放模式
-      setPlayMode: (mode) => set({ playMode: mode }),
+      setPlayMode: (mode) => {
+        const state = get();
+        const newMode = mode;
+
+        // 如果是从非随机模式切换到随机模式，需要打乱列表
+        if (newMode === "shuffle" && state.playMode !== "shuffle") {
+          // 保存当前正在播放的歌曲
+          const currentSong = state.currentSong;
+
+          // 使用 Fisher-Yates 算法打乱列表
+          const shuffledPlaylist = shufflePlaylist(state.originalPlaylist);
+
+          // 找到当前歌曲在打乱后列表中的位置
+          const newIndex = currentSong
+            ? shuffledPlaylist.findIndex((s) => s.id === currentSong.id)
+            : 0;
+
+          set({
+            playMode: newMode,
+            playlist: shuffledPlaylist,
+            currentIndex: newIndex >= 0 ? newIndex : 0,
+          });
+        }
+        // 如果从随机模式切换回其他模式，恢复原始顺序
+        else if (newMode !== "shuffle" && state.playMode === "shuffle") {
+          const currentSong = state.currentSong;
+
+          // 恢复原始顺序列表
+          const restoredPlaylist = state.originalPlaylist;
+
+          // 找到当前歌曲在原始列表中的位置
+          const newIndex = currentSong
+            ? restoredPlaylist.findIndex((s) => s.id === currentSong.id)
+            : 0;
+
+          set({
+            playMode: newMode,
+            playlist: restoredPlaylist,
+            currentIndex: newIndex >= 0 ? newIndex : 0,
+          });
+        }
+        // 其他情况只切换模式
+        else {
+          set({ playMode: newMode });
+        }
+      },
 
       // 清空播放列表
       clearPlaylist: () =>
         set({
           playlist: [],
+          originalPlaylist: [], // 同时清空原始列表
           currentSong: null,
           currentIndex: -1,
           isPlaying: false,

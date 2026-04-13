@@ -6,9 +6,18 @@
 .music-page {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  /* 使用 100% 而不是 100vh，确保在 app-main 内正确撑满 */
+  height: 100%;
+  width: 100%;
+
   overflow: hidden;
-  background: #f9fafb;
+  background: var(--bg);
+  box-shadow: none;
+  border: none;
+  outline: none;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 /* 内容区域 */
@@ -18,14 +27,15 @@
   padding: 0;
   display: flex;
   flex-direction: column;
+  min-height: 0;
 }
-
 /* 页面头部 */
 .music-header {
   padding: 24px 32px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #fff;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* 移除 box-shadow，或改为更柔和的 */
+  box-shadow: none;
 }
 
 .music-header h1 {
@@ -48,16 +58,19 @@
   gap: 24px;
   padding: 24px 32px;
   overflow: hidden;
+  min-height: 0; /* 关键：允许 grid 子项缩小 */
 }
 
 /* 区块通用样式 */
 .music-section {
-  background: #fff;
+  background: var(--music-card-bg);
   border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  /* 移除 box-shadow，或改为更柔和的 */
+  box-shadow: none;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  min-height: 0; /* 关键：允许 flex 子项缩小 */
 }
 
 .section-header {
@@ -65,21 +78,22 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  border-bottom: 1px solid #e5e7eb;
-  background: #f9fafb;
+  /* 移除底部边框 */
+  border-bottom: 1px solid var(--music-border);
+  background: var(--bg-secondary);
 }
 
 .section-header h2 {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--music-text-primary);
 }
 
 .song-count {
   font-size: 12px;
-  color: #6b7280;
-  background: #e5e7eb;
+  color: var(--music-text-secondary);
+  background: var(--music-border);
   padding: 4px 10px;
   border-radius: 10px;
 }
@@ -94,27 +108,38 @@
 
 /* 歌词区 */
 .lyrics-section {
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
+  min-height: 0;
 }
 
 .lyrics-wrapper {
   flex: 1;
-  overflow: hidden;
-  background: linear-gradient(180deg, #fafafa 0%, #fff 100%);
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  min-height: 0;
 }
 
 .lyrics-panel {
-  height: 100%;
+  flex: 1;
   border: none;
   border-radius: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
 }
 
 /* 底部播放器 */
 .music-player-wrapper {
   flex-shrink: 0;
-  border-top: 1px solid #e5e7eb;
+  /* 移除顶部边框 */
+  border-top: none;
   background: #fff;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+  /* 移除 box-shadow，或改为更柔和的 */
+  box-shadow: none;
 }
 
 .music-player-container {
@@ -166,4 +191,3 @@
 
 /* 移除组件级样式，由组件自己管理 */
 /* .song-item 动画已在 SongList.css 中定义 */
-

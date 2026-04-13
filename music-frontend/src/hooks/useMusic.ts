@@ -5,6 +5,9 @@
 import { useEffect, useRef, useCallback } from "react";
 import { useMusicStore } from "@/stores/useMusicStore";
 
+// 获取 store 的 setState 方法（用于直接修改状态）
+const setMusicState = useMusicStore.setState;
+
 // 全局单例 Audio 元素，避免 StrictMode 导致的重复创建
 let globalAudioElement: HTMLAudioElement | null = null;
 let globalAudioInitialized = false;
@@ -27,6 +30,17 @@ export function useMusic() {
     setVolume,
     setPlayMode,
   } = useMusicStore();
+
+  // 调试：监听状态变化
+  useEffect(() => {
+    console.log('🎼 useMusic: 状态变化');
+    console.log('  - currentSong:', currentSong?.title);
+    console.log('  - isPlaying:', isPlaying);
+    console.log('  - currentIndex:', currentIndex);
+  }, [currentSong, isPlaying, currentIndex]);
+
+  // 获取 store 的 get 方法用于读取状态
+  const storeGet = useMusicStore.getState.bind(useMusicStore);
 
   // 使用 ref 保存稳定的引用，避免依赖数组问题
   const storeNextSongRef = useRef(storeNextSong);
@@ -51,6 +65,18 @@ export function useMusic() {
     if (globalAudioInitialized && globalAudioElement) {
       console.log('♻️ 复用全局 Audio 元素');
       audioRef.current = globalAudioElement;
+
+      // 🔥 关键：同步 Audio 实际播放状态到 store
+      const actuallyPlaying = !globalAudioElement.paused;
+      const state = storeGet();
+      if (actuallyPlaying !== state.isPlaying) {
+        console.log('🔄 同步播放状态:', actuallyPlaying);
+        if (state.currentSong) {
+          // 只在有歌曲时才同步状态
+          setMusicState({ isPlaying: actuallyPlaying });
+        }
+      }
+
       return;
     }
 
@@ -62,8 +88,22 @@ export function useMusic() {
 
     // 保存事件处理函数引用，以便清理
     const handleEnded = () => {
-      console.log('✅ 播放结束，自动下一首');
-      storeNextSongRef.current();
+      const state = storeGet(); // 获取当前 store 状态
+
+      if (state.playMode === "loop-one") {
+        // 单曲循环：重新播放当前歌曲
+        console.log('🔂 单曲循环，重新播放');
+        audio.currentTime = 0; // 重置播放时间
+        audio.play().catch((err) => {
+          if (err.name !== 'AbortError') {
+            console.error('单曲循环播放失败:', err);
+          }
+        });
+      } else {
+        // 其他模式：播放下一首
+        console.log('✅ 播放结束，自动下一首');
+        storeNextSongRef.current();
+      }
     };
 
     const handleError = (e: Event) => {
@@ -136,6 +176,7 @@ export function useMusic() {
     }
 
     if (!currentSong) {
+      console.log('⚠️ currentSong 为 null');
       audio.pause();
       audio.src = '';
       currentSongIdRef.current = undefined;
@@ -147,6 +188,17 @@ export function useMusic() {
     // 同一首歌不重复加载
     if (currentSongIdRef.current === currentSong.id) {
       console.log('⏭️ 同一首歌，跳过加载');
+      console.log('📍 当前歌曲ID:', currentSongIdRef.current);
+      console.log('📍 新歌曲ID:', currentSong.id);
+
+      // 但仍然需要同步播放状态
+      shouldPlayRef.current = isPlaying;
+      if (isPlaying && audio.paused) {
+        console.log('▶️ 同一首歌，恢复播放');
+        audio.play().catch((err) => {
+          console.error('播放失败:', err);
+        });
+      }
       return;
     }
 
@@ -198,7 +250,12 @@ export function useMusic() {
       return;
     }
 
-    if (isPlaying) {
+    // 🔥 关键：检查 Audio 的实际播放状态，避免不必要的暂停/播放
+    const actuallyPlaying = !audio.paused;
+
+    if (isPlaying && !actuallyPlaying) {
+      // 应该播放但实际未播放 → 播放
+      console.log('▶️ 恢复播放');
       audio.play().catch((err) => {
         // 忽略中止错误
         if (err.name === 'AbortError' || err.message?.includes('aborted')) {
@@ -207,10 +264,13 @@ export function useMusic() {
         }
         console.error('播放失败:', err);
       });
-    } else {
+    } else if (!isPlaying && actuallyPlaying) {
+      // 不应该播放但实际在播放 → 暂停
+      console.log('⏸️ 暂停播放');
       audio.pause();
     }
-  }, [isPlaying, currentSong?.id]);
+    // 如果状态一致，不做任何操作
+  }, [isPlaying]); // 🔥 移除 currentSong?.id 依赖，避免歌曲切换时重新执行
 
   // 同步音量
   useEffect(() => {
