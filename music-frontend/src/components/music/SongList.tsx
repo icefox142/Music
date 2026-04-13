@@ -13,12 +13,36 @@ interface SongListProps {
 }
 
 export function SongList({ songs, onSongSelect, selectedSongId }: SongListProps) {
-  const { isPlaying } = useMusicStore();
+  const { isPlaying, togglePlay } = useMusicStore();
 
   const handleSongClick = (song: Song) => {
     console.log('🖱️ SongList: 点击歌曲项:', song.title);
     console.log('🔄 调用 onSongSelect 回调');
     onSongSelect?.(song);
+  };
+
+  const handlePlayBtnClick = (e: React.MouseEvent, song: Song, isActive: boolean) => {
+    e.stopPropagation();
+    console.log('🎯 播放按钮点击');
+    console.log('📍 isActive:', isActive);
+    console.log('📍 当前 isPlaying:', isPlaying);
+
+    if (isActive) {
+      // 点击当前播放歌曲 → 切换播放/暂停
+      console.log('🔄 切换播放状态');
+      console.log('📍 调用前 isPlaying:', isPlaying);
+      togglePlay();
+
+      // 立即检查调用后的状态
+      setTimeout(() => {
+        const newState = useMusicStore.getState();
+        console.log('📍 调用后 isPlaying:', newState.isPlaying);
+      }, 0);
+    } else {
+      // 点击其他歌曲 → 切换到新歌曲
+      console.log('🎵 切换到新歌曲');
+      handleSongClick(song);
+    }
   };
 
   if (songs.length === 0) {
@@ -56,21 +80,11 @@ export function SongList({ songs, onSongSelect, selectedSongId }: SongListProps)
 
                 {/* 悬停显示播放按钮 */}
                 <button
-  className="play-btn"
-  onClick={(e) => {
-    e.stopPropagation();
-    // 如果点击的是当前播放歌曲，则暂停/播放切换
-    if (isActive) {
-      // 调用 store 的暂停/播放切换方法
-      useMusicStore.getState().togglePlay(); // 或 setIsPlaying(!isPlaying)
-    } else {
-      // 切换到新歌曲
-      handleSongClick(song);
-    }
-  }}
->
-
-</button>
+                  className="play-btn"
+                  onClick={(e) => handlePlayBtnClick(e, song, isActive)}
+                >
+                  {isActive && isPlaying ? '⏸' : '▶️'}
+                </button>
 
                 {/* 激活且播放中显示动画 */}
                 {isActive && isPlaying && (

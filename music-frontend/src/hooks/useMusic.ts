@@ -58,6 +58,8 @@ export function useMusic() {
   const currentSongIdRef = useRef<string | undefined>(undefined);
   const isInitializingRef = useRef<boolean>(false);
   const shouldPlayRef = useRef<boolean>(false);
+  const failedSongsRef = useRef<Set<string>>(new Set()); // 记录失败的歌曲ID
+  const consecutiveErrorsRef = useRef<number>(0); // 连续错误计数
 
   // 初始化全局 Audio 元素（只执行一次）
   useEffect(() => {
@@ -90,6 +92,9 @@ export function useMusic() {
     const handleEnded = () => {
       const state = storeGet(); // 获取当前 store 状态
 
+      // 🔥 歌曲正常播放结束，重置连续错误计数
+      consecutiveErrorsRef.current = 0;
+
       if (state.playMode === "loop-one") {
         // 单曲循环：重新播放当前歌曲
         console.log('🔂 单曲循环，重新播放');
@@ -116,18 +121,63 @@ export function useMusic() {
         return;
       }
 
+      const state = storeGet();
+      const currentSongId = state.currentSong?.id;
+
       console.error('❌ 音频错误:', {
         url: target.src,
         code: mediaError?.code,
         message: mediaError?.message,
+        songId: currentSongId,
       });
 
       isInitializingRef.current = false;
+
+      // 🔥 只处理真正的加载错误（MEDIA_ERR_SRC_NOT_SUPPORTED = 4）
+      if (mediaError?.code === MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED && currentSongId) {
+        // 检查是否已经尝试过这首歌
+        if (failedSongsRef.current.has(currentSongId)) {
+          console.log('⚠️ 这首歌已经失败过，停止尝试');
+          return;
+        }
+
+        // 记录失败的歌曲
+        failedSongsRef.current.add(currentSongId);
+        consecutiveErrorsRef.current++;
+
+        console.log(`📝 连续失败次数: ${consecutiveErrorsRef.current}`);
+
+        // 如果连续失败超过 3 次，停止自动跳转
+        if (consecutiveErrorsRef.current >= 2) {
+          console.error('🛑 连续失败次数过多，停止自动播放');
+          setMusicState({ isPlaying: false });
+          return;
+        }
+
+        // 自动跳到下一首
+        console.log('⏭️ 歌曲加载失败，自动跳到下一首');
+        setTimeout(() => {
+          storeNextSongRef.current();
+          alert('🎵 这首歌暂时不存在，即将为您播放下一首');
+        }, 1000); // 延迟 1 秒，让用户看到错误
+      }
     };
 
     const handleCanPlay = () => {
       console.log('✅ 可以播放');
       isInitializingRef.current = false;
+
+      // 🔥 歌曲成功加载，重置连续错误计数
+      consecutiveErrorsRef.current = 0;
+      console.log('📊 重置连续错误计数');
+
+      // 🔥 关键：检查用户是否明确请求了暂停
+      // 如果音频当前正在播放但 shouldPlayRef 是 false，说明用户在加载期间点击了暂停
+      if (!audio.paused && !shouldPlayRef.current) {
+        console.log('⏸️ 检测到用户暂停请求，停止自动播放');
+        audio.pause();
+        return;
+      }
 
       if (shouldPlayRef.current && audio.paused) {
         console.log('▶️ 自动播放');
@@ -213,6 +263,15 @@ export function useMusic() {
     isInitializingRef.current = true;
     shouldPlayRef.current = isPlaying;
 
+    // 🔥 切换到新歌曲时重置连续错误计数
+    consecutiveErrorsRef.current = 0;
+
+    // 🔥 清除这首歌的失败记录（给用户手动选择的歌曲一个新的机会）
+    if (currentSong.id && failedSongsRef.current.has(currentSong.id)) {
+      failedSongsRef.current.delete(currentSong.id);
+      console.log('🔄 清除歌曲失败记录:', currentSong.id);
+    }
+
     try {
       // 先暂停
       audio.pause();
@@ -241,35 +300,56 @@ export function useMusic() {
   // 同步播放状态
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio || !currentSong) return;
+    if (!audio || !currentSong) {
+      console.log('⚠️ 播放状态检查: audio 或 currentSong 为空');
+      return;
+    }
+
+    console.log('🎵 播放状态同步');
+    console.log('  - currentSong:', currentSong.title);
+    console.log('  - isPlaying:', isPlaying);
+    console.log('  - audio.paused:', audio.paused);
+    console.log('  - isInitializing:', isInitializingRef.current);
 
     shouldPlayRef.current = isPlaying;
 
+    // 🔥 关键修复：如果用户明确要暂停（isPlaying = false），立即执行暂停，
+    // 即使正在初始化。这会阻止 canplay 事件的自动播放
+    if (!isPlaying && !audio.paused) {
+      console.log('⏸️ 用户请求暂停，强制停止（即使正在初始化）');
+      audio.pause();
+      // 不要重置 isInitializingRef，让加载流程继续完成
+      return;
+    }
+
     // 初始化中等待 canplay
     if (isInitializingRef.current) {
+      console.log('⏳ 等待初始化完成...');
       return;
     }
 
     // 🔥 关键：检查 Audio 的实际播放状态，避免不必要的暂停/播放
     const actuallyPlaying = !audio.paused;
+    console.log('🔄 Audio 实际播放状态:', actuallyPlaying);
 
     if (isPlaying && !actuallyPlaying) {
       // 应该播放但实际未播放 → 播放
-      console.log('▶️ 恢复播放');
+      console.log('▶️ 应该播放但实际未播放 → 开始播放');
       audio.play().catch((err) => {
         // 忽略中止错误
         if (err.name === 'AbortError' || err.message?.includes('aborted')) {
-          console.log('忽略播放中止错误');
+          console.log('✅ 忽略播放中止错误');
           return;
         }
-        console.error('播放失败:', err);
+        console.error('❌ 播放失败:', err);
       });
     } else if (!isPlaying && actuallyPlaying) {
       // 不应该播放但实际在播放 → 暂停
-      console.log('⏸️ 暂停播放');
+      console.log('⏸️ 不应该播放但实际在播放 → 暂停');
       audio.pause();
+    } else {
+      console.log('✅ 状态一致，无需操作');
     }
-    // 如果状态一致，不做任何操作
   }, [isPlaying]); // 🔥 移除 currentSong?.id 依赖，避免歌曲切换时重新执行
 
   // 同步音量

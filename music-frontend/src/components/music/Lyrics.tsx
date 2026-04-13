@@ -101,14 +101,6 @@ export function Lyrics({ songId, lyrics: propLyrics, className = "" }: LyricsPro
   // 计算滚动位置（使用 transform）
   const translateY = activeIndex >= 0 ? -(activeIndex - centerLineCount) * LINE_HEIGHT : 0;
 
-  // 调试信息
-  console.log('歌词状态:', {
-    activeIndex,
-    centerLineCount,
-    translateY,
-    lyricsCount: finalLyrics.length,
-    firstLyric: finalLyrics[0]?.text
-  });
 
   // 点击歌词行跳转
   const handleLineClick = (time: number) => {
@@ -126,7 +118,7 @@ export function Lyrics({ songId, lyrics: propLyrics, className = "" }: LyricsPro
   };
 
   if (finalLyrics.length === 0 || (finalLyrics.length === 1 && finalLyrics[0].text === "暂无歌词")) {
-    console.log('显示空状态:', { finalLyrics });
+    
     return (
       <div className={`lyrics-container ${className}`}>
         <div className="lyrics-empty">
@@ -137,13 +129,6 @@ export function Lyrics({ songId, lyrics: propLyrics, className = "" }: LyricsPro
     );
   }
 
-  console.log('渲染歌词:', {
-    count: finalLyrics.length,
-    activeIndex,
-    translateY,
-    firstLine: finalLyrics[0],
-    lastLine: finalLyrics[finalLyrics.length - 1]
-  });
 
   return (
     <div className={`lyrics-container ${className}`}>

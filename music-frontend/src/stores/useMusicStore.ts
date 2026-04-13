@@ -184,7 +184,21 @@ export const useMusicStore = create<MusicPlayerState>()(
       },
 
       // 切换播放/暂停
-      togglePlay: () => set((state) => ({ isPlaying: !state.isPlaying })),
+      togglePlay: () => {
+        const currentState = get();
+        console.log('🎛️ togglePlay 调用');
+        console.log('📍 当前 isPlaying:', currentState.isPlaying);
+        console.log('🔄 将切换为:', !currentState.isPlaying);
+
+        set((state) => ({ isPlaying: !state.isPlaying }));
+
+        // 检查状态是否更新
+        setTimeout(() => {
+          const newState = get();
+          console.log('✅ togglePlay 完成');
+          console.log('📍 新的 isPlaying:', newState.isPlaying);
+        }, 0);
+      },
 
       // 下一首
       nextSong: () => {
