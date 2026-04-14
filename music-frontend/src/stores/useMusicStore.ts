@@ -348,12 +348,12 @@ export const useMusicStore = create<MusicPlayerState>()(
       partialize: (state) => ({
         volume: state.volume,
         playMode: state.playMode,
-        // 持久化更多状态，确保页面切换时保持播放状态
+        // 持久化播放列表和当前歌曲，但不持久化播放状态
         currentSong: state.currentSong,
         playlist: state.playlist,
         originalPlaylist: state.originalPlaylist,
         currentIndex: state.currentIndex,
-        isPlaying: state.isPlaying,
+        // ❌ 不持久化 isPlaying，避免刷新页面后自动播放
       }),
     }
   )

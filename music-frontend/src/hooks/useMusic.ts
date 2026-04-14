@@ -69,8 +69,17 @@ export function useMusic() {
       console.log('♻️ 复用全局 Audio 元素');
       audioRef.current = globalAudioElement;
 
-      // 🔥 关键：同步 Audio 实际播放状态到 store
-      const actuallyPlaying = !globalAudioElement.paused;
+      // 🔥 关键修复：应用启动时强制暂停播放
+      // 即使之前保存了播放状态，也要暂停
+      if (!globalAudioElement.paused) {
+        console.log('🛑 应用启动：强制暂停播放');
+        globalAudioElement.pause();
+      }
+
+      // 🔥 强制设置暂停状态到 store
+      setMusicState({ isPlaying: false });
+      shouldPlayRef.current = false;
+
       const state = storeGet();
       console.log('🔄 当前 store 状态:', {
         isPlaying: state.isPlaying,
@@ -83,15 +92,8 @@ export function useMusic() {
         currentTime: globalAudioElement.currentTime
       });
 
-      // 🔥 优化：只在实际需要时才同步状态，避免不必要的状态更新
-      if (actuallyPlaying !== state.isPlaying && state.currentSong) {
-        console.log('🔄 同步播放状态:', actuallyPlaying);
-        setMusicState({ isPlaying: actuallyPlaying });
-      }
-
       // 🔥 关键：设置 refs，避免重复初始化
       currentSongIdRef.current = state.currentSong?.id;
-      shouldPlayRef.current = state.isPlaying;
       isInitializingRef.current = false; // 🔥 确保不会被认为是初始化中
 
       console.log('✅ Audio 元素复用完成，状态已同步');
