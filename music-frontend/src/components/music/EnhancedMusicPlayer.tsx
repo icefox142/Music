@@ -23,6 +23,76 @@ export function EnhancedMusicPlayer({ className = "" }: EnhancedMusicPlayerProps
     setPlayMode,
   } = useMusic();
 
+  // 播放模式循环切换
+  const cyclePlayMode = () => {
+    const modes: Array<"sequence" | "shuffle" | "loop-one" | "loop-all"> = ["sequence", "shuffle", "loop-one", "loop-all"];
+    const currentIndex = modes.indexOf(playMode as any);
+    const nextIndex = (currentIndex + 1) % modes.length;
+    setPlayMode(modes[nextIndex]);
+  };
+
+  // 获取当前模式对应的图标
+  const getPlayModeIcon = () => {
+    switch (playMode) {
+      case "sequence":
+        return (
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <polygon points="15,3 21,6 15,9"></polygon>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+            <polygon points="9,15 3,18 9,21"></polygon>
+          </svg>
+        );
+      case "shuffle":
+        return (
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="16,3 21,3 21,8"></polyline>
+            <line x1="4" y1="20" x2="21" y2="3"></line>
+            <polyline points="21,16 21,21 16,21"></polyline>
+            <line x1="15" y1="15" x2="21" y2="21"></line>
+            <line x1="4" y1="4" x2="9" y2="9"></line>
+          </svg>
+        );
+      case "loop-one":
+        return (
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M1 4v6h6"></path>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+            <circle cx="12" cy="13" r="3" fill="currentColor"></circle>
+          </svg>
+        );
+      case "loop-all":
+        return (
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M1 4v6h6"></path>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+            <path d="M23 20v-6h-6"></path>
+            <path d="M20.49 9a9 9 0 1 0-2.13 9.36L23 14"></path>
+          </svg>
+        );
+      default:
+        return (
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <polygon points="15,3 21,6 15,9"></polygon>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+            <polygon points="9,15 3,18 9,21"></polygon>
+          </svg>
+        );
+    }
+  };
+
+  // 获取当前模式对应的提示文字
+  const getPlayModeTitle = () => {
+    switch (playMode) {
+      case "sequence": return "顺序播放";
+      case "shuffle": return "随机播放";
+      case "loop-one": return "单曲循环";
+      case "loop-all": return "列表循环";
+      default: return "顺序播放";
+    }
+  };
+
   return (
     <div className={`enhanced-music-player ${className}`}>
       {/* 歌曲信息 */}
@@ -57,7 +127,10 @@ export function EnhancedMusicPlayer({ className = "" }: EnhancedMusicPlayerProps
             aria-label="上一首"
             title="上一首"
           >
-            ⏮
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="19,20 9,12 19,4"></polygon>
+              <line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" strokeWidth="2"></line>
+            </svg>
           </button>
 
           <button
@@ -66,7 +139,16 @@ export function EnhancedMusicPlayer({ className = "" }: EnhancedMusicPlayerProps
             aria-label={isPlaying ? "暂停" : "播放"}
             title={isPlaying ? "暂停" : "播放"}
           >
-            {isPlaying ? "⏸" : "▶️"}
+            {isPlaying ? (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="6" y="4" width="4" height="16"></rect>
+                <rect x="14" y="4" width="4" height="16"></rect>
+              </svg>
+            ) : (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5,3 19,12 5,21"></polygon>
+              </svg>
+            )}
           </button>
 
           <button
@@ -75,43 +157,22 @@ export function EnhancedMusicPlayer({ className = "" }: EnhancedMusicPlayerProps
             aria-label="下一首"
             title="下一首"
           >
-            ⏭
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5,4 15,12 5,20"></polygon>
+              <line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" strokeWidth="2"></line>
+            </svg>
           </button>
         </div>
 
         {/* 播放模式 */}
         <div className="play-modes">
           <button
-            onClick={() => setPlayMode("sequence")}
-            className={`play-mode-btn ${playMode === "sequence" ? "active" : ""}`}
-            title="顺序播放"
-            aria-label="顺序播放"
+            onClick={cyclePlayMode}
+            className="play-mode-btn active"
+            title={getPlayModeTitle()}
+            aria-label={getPlayModeTitle()}
           >
-            🔁
-          </button>
-          <button
-            onClick={() => setPlayMode("shuffle")}
-            className={`play-mode-btn ${playMode === "shuffle" ? "active" : ""}`}
-            title="随机播放"
-            aria-label="随机播放"
-          >
-            🔀
-          </button>
-          <button
-            onClick={() => setPlayMode("loop-one")}
-            className={`play-mode-btn ${playMode === "loop-one" ? "active" : ""}`}
-            title="单曲循环"
-            aria-label="单曲循环"
-          >
-            🔂
-          </button>
-          <button
-            onClick={() => setPlayMode("loop-all")}
-            className={`play-mode-btn ${playMode === "loop-all" ? "active" : ""}`}
-            title="列表循环"
-            aria-label="列表循环"
-          >
-            🔁
+            {getPlayModeIcon()}
           </button>
         </div>
 

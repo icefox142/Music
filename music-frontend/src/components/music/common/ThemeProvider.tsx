@@ -28,24 +28,5 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     applyTheme(theme);
   }, [theme]);
 
-  // 监听系统主题变化（仅在未手动设置时）
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-
-    const handleSystemThemeChange = (e: MediaQueryListEvent) => {
-      // 只有在用户没有手动设置主题时才响应系统变化
-      const storedTheme = localStorage.getItem("theme-storage");
-      if (!storedTheme) {
-        applyTheme(e.matches ? "dark" : "light");
-      }
-    };
-
-    mediaQuery.addEventListener("change", handleSystemThemeChange);
-
-    return () => {
-      mediaQuery.removeEventListener("change", handleSystemThemeChange);
-    };
-  }, []);
-
   return <>{children}</>;
 }

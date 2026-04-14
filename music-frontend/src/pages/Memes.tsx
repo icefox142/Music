@@ -21,7 +21,7 @@ export function Memes() {
         return [...prev, tag];
       }
     });
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
 
   const handlePageChange = (page: number) => {
@@ -39,7 +39,7 @@ export function Memes() {
         {/* 主内容区 */}
         <div className="memes-main">
           <div className="memes-header">
-            <h2>表情包</h2>
+            
             {selectedTags.length > 0 && (
               <div className="selected-tags">
                 {selectedTags.map((tag) => (

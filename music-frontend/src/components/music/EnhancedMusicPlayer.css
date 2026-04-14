@@ -132,9 +132,14 @@
   background: var(--music-button-bg);
   border: 1px solid var(--music-button-border);
   border-radius: 8px;
-  font-size: 16px;
   cursor: pointer;
   transition: all 0.2s;
+  color: var(--music-text-primary);
+}
+
+.playback-controls button svg {
+  width: 16px;
+  height: 16px;
 }
 
 .playback-controls button:hover:not(:disabled) {
@@ -150,6 +155,35 @@
 .playback-controls button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+
+/* 歌词切换 */
+.lyrics-toggle {
+  display: flex;
+  gap: 3px;
+  background: var(--music-mode-bg);
+  padding: 3px;
+  border-radius: 8px;
+}
+
+.lyrics-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: var(--accent);
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: white;
+}
+
+.lyrics-toggle-btn:hover {
+  background: var(--accent-hover);
+  transform: scale(1.05);
 }
 
 /* 播放模式 */
@@ -170,10 +204,14 @@
   border: none;
   background: transparent;
   border-radius: 6px;
-  font-size: 14px;
   cursor: pointer;
   transition: all 0.2s;
   color: var(--music-text-secondary);
+}
+
+.play-mode-btn svg {
+  width: 16px;
+  height: 16px;
 }
 
 .play-mode-btn:hover {

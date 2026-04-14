@@ -129,6 +129,8 @@
   flex: 1;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
   min-width: 0;
 }
 
@@ -285,4 +287,21 @@
   .app-main {
     padding: 8px;
   }
+}
+
+/* ===== 全局播放器 ===== */
+.global-player-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 调整主体内容区，为底部播放器留出空间 */
+.app {
+  padding-bottom: 80px;
 }

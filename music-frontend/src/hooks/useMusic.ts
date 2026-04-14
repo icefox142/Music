@@ -37,6 +37,7 @@ export function useMusic() {
     console.log('  - currentSong:', currentSong?.title);
     console.log('  - isPlaying:', isPlaying);
     console.log('  - currentIndex:', currentIndex);
+    console.log('  - audio状态:', audioRef.current ? (audioRef.current.paused ? 'paused' : 'playing') : 'null');
   }, [currentSong, isPlaying, currentIndex]);
 
   // 获取 store 的 get 方法用于读取状态
@@ -71,14 +72,29 @@ export function useMusic() {
       // 🔥 关键：同步 Audio 实际播放状态到 store
       const actuallyPlaying = !globalAudioElement.paused;
       const state = storeGet();
-      if (actuallyPlaying !== state.isPlaying) {
+      console.log('🔄 当前 store 状态:', {
+        isPlaying: state.isPlaying,
+        currentSong: state.currentSong?.title,
+        currentIndex: state.currentIndex
+      });
+      console.log('🔄 Audio 实际状态:', {
+        paused: globalAudioElement.paused,
+        src: globalAudioElement.src,
+        currentTime: globalAudioElement.currentTime
+      });
+
+      // 🔥 优化：只在实际需要时才同步状态，避免不必要的状态更新
+      if (actuallyPlaying !== state.isPlaying && state.currentSong) {
         console.log('🔄 同步播放状态:', actuallyPlaying);
-        if (state.currentSong) {
-          // 只在有歌曲时才同步状态
-          setMusicState({ isPlaying: actuallyPlaying });
-        }
+        setMusicState({ isPlaying: actuallyPlaying });
       }
 
+      // 🔥 关键：设置 refs，避免重复初始化
+      currentSongIdRef.current = state.currentSong?.id;
+      shouldPlayRef.current = state.isPlaying;
+      isInitializingRef.current = false; // 🔥 确保不会被认为是初始化中
+
+      console.log('✅ Audio 元素复用完成，状态已同步');
       return;
     }
 
@@ -227,11 +243,14 @@ export function useMusic() {
 
     if (!currentSong) {
       console.log('⚠️ currentSong 为 null');
-      audio.pause();
-      audio.src = '';
-      currentSongIdRef.current = undefined;
-      shouldPlayRef.current = false;
-      isInitializingRef.current = false;
+      // 🔥 只在没有播放任何歌曲时才清空
+      if (!audio.src || audio.src === window.location.href) {
+        audio.pause();
+        audio.src = '';
+        currentSongIdRef.current = undefined;
+        shouldPlayRef.current = false;
+        isInitializingRef.current = false;
+      }
       return;
     }
 
@@ -240,16 +259,34 @@ export function useMusic() {
       console.log('⏭️ 同一首歌，跳过加载');
       console.log('📍 当前歌曲ID:', currentSongIdRef.current);
       console.log('📍 新歌曲ID:', currentSong.id);
+      console.log('📍 Audio当前状态:', {
+        paused: audio.paused,
+        currentTime: audio.currentTime,
+        src: audio.src
+      });
 
-      // 但仍然需要同步播放状态
-      shouldPlayRef.current = isPlaying;
-      if (isPlaying && audio.paused) {
-        console.log('▶️ 同一首歌，恢复播放');
-        audio.play().catch((err) => {
-          console.error('播放失败:', err);
-        });
+      // 🔥 关键修复：确认已经在播放正确的歌曲，完全跳过初始化
+      if (audio.src && audio.src !== window.location.href) {
+        console.log('✅ Audio已经有正确的源，跳过所有初始化');
+        isInitializingRef.current = false;
+        shouldPlayRef.current = isPlaying;
+
+        // 只同步播放状态
+        if (isPlaying && audio.paused) {
+          console.log('▶️ 同一首歌，恢复播放');
+          audio.play().catch((err) => {
+            console.error('播放失败:', err);
+          });
+        } else if (!isPlaying && !audio.paused) {
+          console.log('⏸️ 同一首歌，暂停播放');
+          audio.pause();
+        }
+
+        return; // 🔥 提前返回，不执行后续任何初始化代码
       }
-      return;
+
+      // 如果Audio没有正确的源，继续执行初始化
+      console.log('⚠️ Audio没有正确的源，需要重新加载');
     }
 
     // 防止快速切换导致的竞态
@@ -295,7 +332,7 @@ export function useMusic() {
       shouldPlayRef.current = false;
     }
 
-  }, [currentSong?.id, currentSong?.audioUrl, isPlaying]); // ✅ 添加 isPlaying 依赖
+  }, [currentSong?.id, currentSong?.audioUrl]); // 移除 isPlaying 依赖，避免状态变化时重新加载音频
 
   // 同步播放状态
   useEffect(() => {
@@ -310,8 +347,15 @@ export function useMusic() {
     console.log('  - isPlaying:', isPlaying);
     console.log('  - audio.paused:', audio.paused);
     console.log('  - isInitializing:', isInitializingRef.current);
+    console.log('  - currentSongIdRef:', currentSongIdRef.current);
 
     shouldPlayRef.current = isPlaying;
+
+    // 🔥 关键优化：如果正在初始化且是同一首歌，跳过状态同步
+    if (isInitializingRef.current && currentSongIdRef.current === currentSong.id) {
+      console.log('⏳ 正在初始化同一首歌，等待初始化完成...');
+      return;
+    }
 
     // 🔥 关键修复：如果用户明确要暂停（isPlaying = false），立即执行暂停，
     // 即使正在初始化。这会阻止 canplay 事件的自动播放

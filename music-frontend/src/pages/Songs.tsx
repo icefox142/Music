@@ -1,33 +1,45 @@
 /**
- * 歌曲列表组件
- * Song list component
+ * 歌曲页面
+ * Songs page - 显示所有歌曲列表
  */
 
 import useSWR from "swr";
-
 import { songsApi } from "@/api";
 import type { Song } from "@/types/api";
+import "./Songs.css";
 
-export function SongList() {
+export function Songs() {
   const { data, error, isLoading } = useSWR("/api/client/songs", () =>
     songsApi.getList({ page: 1, pageSize: 20 })
   );
 
   if (isLoading) {
-    return <div>加载中...</div>;
+    return (
+      <div className="songs-page">
+        <div className="loading-state">加载中...</div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div>加载失败: {error.message}</div>;
+    return (
+      <div className="songs-page">
+        <div className="error-state">加载失败: {error.message}</div>
+      </div>
+    );
   }
 
   if (!data?.data?.length) {
-    return <div>暂无歌曲</div>;
+    return (
+      <div className="songs-page">
+        <div className="empty-state">暂无歌曲</div>
+      </div>
+    );
   }
 
   return (
-    <div className="song-list">
-      <h2>歌曲列表</h2>
+    <div className="songs-page">
+      <h1>歌曲列表</h1>
       <div className="song-grid">
         {data.data.map((song) => (
           <div key={song.id} className="song-card">

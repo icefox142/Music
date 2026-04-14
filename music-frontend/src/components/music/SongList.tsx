@@ -92,7 +92,7 @@ export function SongList({ songs, onSongSelect, selectedSongId }: SongListProps)
                     <span></span>
                     <span></span>
                     <span></span>
-                    
+
                   </div>
                 )}
               </div>

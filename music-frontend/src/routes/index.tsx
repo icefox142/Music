@@ -5,7 +5,7 @@
 
 import { Routes, Route, Outlet } from "react-router-dom";
 import { Home } from "@/pages/Home";
-import { SongList } from "@/components/SongList";
+import { Songs } from "@/pages/Songs";
 import { Playlists } from "@/pages/Playlists";
 import { Memes } from "@/pages/Memes";
 import { Music } from "@/pages/Music";
@@ -40,7 +40,7 @@ export function AppRoutes() {
 
       {/* 歌曲路由组 */}
       <Route path="/songs" element={<SongsLayout />}>
-        <Route index element={<SongList />} />
+        <Route index element={<Songs />} />
         {/* <Route path=":id" element={<SongDetail />} /> */}
       </Route>
 

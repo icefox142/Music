@@ -103,6 +103,30 @@
   overflow: hidden;
 }
 
+/* 其他内容占位组件 */
+.other-content-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 40px;
+  text-align: center;
+  color: var(--music-text-secondary);
+  background: var(--music-card-bg);
+}
+
+.other-content-placeholder p {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.other-content-placeholder p:first-child {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--music-text-primary);
+}
+
 /* 移除 .song-list 样式，让组件自己管理 */
 /* .song-list 样式已在 SongList.css 中定义 */
 
@@ -130,22 +154,6 @@
   display: flex;
   flex-direction: column;
   overflow: visible;
-}
-
-/* 底部播放器 */
-.music-player-wrapper {
-  flex-shrink: 0;
-  /* 移除顶部边框 */
-  border-top: none;
-  background: #fff;
-  /* 移除 box-shadow，或改为更柔和的 */
-  box-shadow: none;
-}
-
-.music-player-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
 }
 
 /* 响应式设计 */
@@ -183,10 +191,6 @@
 
   .section-header h2 {
     font-size: 16px;
-  }
-
-  .music-player-container {
-    padding: 0 16px;
   }
 }
 

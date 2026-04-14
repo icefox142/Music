@@ -7,10 +7,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Link } from "react-router-dom";
 
 import { AppRoutes } from "./routes";
-import { ThemeProvider } from "./components/ThemeProvider";
-import { ThemeToggle } from "./components/ThemeToggle";
+import { ThemeProvider, ThemeToggle } from "./components/music";
+import { EnhancedMusicPlayer } from "./components/music";
 import "./App.css";
-import "./components/sidebar.css";
 
 // 创建 React Query 客户端
 const queryClient = new QueryClient({
@@ -68,6 +67,11 @@ function App() {
           <main className="app-main">
             <AppRoutes />
           </main>
+
+          {/* 全局底部播放器 */}
+          <div className="global-player-wrapper">
+            <EnhancedMusicPlayer />
+          </div>
         </div>
       </BrowserRouter>
       </ThemeProvider>

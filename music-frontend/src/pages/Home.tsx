@@ -3,7 +3,6 @@
  * Home page
  */
 
-import "../components/sidebar.css";
 import "./Home.css";
 
 export function Home() {

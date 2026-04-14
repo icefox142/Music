@@ -3,7 +3,7 @@
  * Music page - 平行组件布局
  */
 
-import { EnhancedMusicPlayer, SongList, Lyrics } from "@/components/music";
+import { SongList, Lyrics } from "@/components/music";
 import { useMusic } from "@/hooks/useMusic";
 import { useSongsMock } from "@/hooks/useSongsMock";
 import type { Song } from "@/types/api";
@@ -33,8 +33,6 @@ export function Music() {
   return (
     <div className="music-page">
       <div className="music-content">
-
-
         {/* 主内容区：歌曲列表 + 歌词 */}
         <div className="music-main">
           {/* 左侧：歌曲列表 */}
@@ -49,11 +47,6 @@ export function Music() {
             <Lyrics songId={currentSong?.id} />
           </div>
         </div>
-      </div>
-
-      {/* 底部播放器 */}
-      <div className="music-player-wrapper">
-        <EnhancedMusicPlayer />
       </div>
     </div>
   );
