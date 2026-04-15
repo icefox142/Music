@@ -5,6 +5,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { emojisApi, type EmojiQueryParams } from "@/api/emojis";
 import { emojiFavoritesApi } from "@/api/emoji-favorites";
+import { emojiCollectionsApi } from "@/api/emoji-collections";
 
 export function useEmojis(params?: EmojiQueryParams) {
   return useQuery({
@@ -56,4 +57,43 @@ export function useEmojiFavorites() {
     queryKey: ["emoji-favorites"],
     queryFn: () => emojiFavoritesApi.getList(),
   });
+}
+
+export function useEmojiCollections() {
+  return useQuery({
+    queryKey: ["emoji-collections"],
+    queryFn: () => emojiCollectionsApi.getList({ isFeatured: true }),
+  });
+}
+
+// 获取所有可用的标签（从表情包列表中提取）
+export function useEmojiTags() {
+  const { data: emojisData } = useEmojis({ pageSize: 1000 });
+
+  // 从所有表情包中提取唯一标签
+  const tags = emojisData?.data
+    ? Array.from(
+        new Set(
+          emojisData.data.flatMap((emoji) => emoji.tags || [])
+        )
+      )
+    : [];
+
+  return { tags };
+}
+
+// 获取所有可用的分类
+export function useEmojiCategories() {
+  const { data: emojisData } = useEmojis({ pageSize: 1000 });
+
+  // 从所有表情包中提取唯一分类
+  const categories = emojisData?.data
+    ? Array.from(
+        new Set(
+          emojisData.data.map((emoji) => emoji.category).filter(Boolean)
+        )
+      )
+    : [];
+
+  return { categories };
 }

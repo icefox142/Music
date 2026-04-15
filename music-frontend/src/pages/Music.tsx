@@ -5,13 +5,14 @@
 
 import { SongList, Lyrics } from "@/components/music";
 import { useMusic } from "@/hooks/useMusic";
-import { useSongsMock } from "@/hooks/useSongsMock";
+import { useSongs } from "@/hooks/useSongs";
 import type { Song } from "@/types/api";
 import "./Music.css";
 
 export function Music() {
   const { currentSong, replaceAndPlay } = useMusic();
-  const { data: songs = [] } = useSongsMock({ page: 1, pageSize: 50 });
+  const { data: songsData } = useSongs({ page: 1, pageSize: 50 });
+  const songs = songsData?.data || [];
 
   const handleSongSelect = (song: Song) => {
     console.log('🎵 点击歌曲:', song.title);

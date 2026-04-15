@@ -3,7 +3,7 @@
  * Memes Sidebar Content Component
  */
 
-import { useEmojiTags } from "@/hooks/useEmojisMock";
+import { useEmojiTags } from "@/hooks/useEmojis";
 import "./SidebarContent.css";
 
 interface SidebarContentProps {

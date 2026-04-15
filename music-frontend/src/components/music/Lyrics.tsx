@@ -5,8 +5,8 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useMusic } from "@/hooks/useMusic";
-import { useLyricsMock } from "@/hooks/useLyricsMock";
-import { useSongMock } from "@/hooks/useSongsMock";
+import { useLyricsBySongId } from "@/hooks/useLyrics";
+import { useSong } from "@/hooks/useSongs";
 import "./Lyrics.css";
 
 interface LyricLine {
@@ -34,13 +34,17 @@ export function Lyrics({ songId, lyrics: propLyrics, className = "" }: LyricsPro
   const listRef = useRef<HTMLDivElement>(null);
   const LINE_HEIGHT = 32;
 
-  const { data: lyricsLRC } = useLyricsMock(songId);
-  const { data: song } = useSongMock(songId || "");
+  const { data: lyricsData } = useLyricsBySongId(songId);
+  const { data: songData } = useSong(songId || "");
   const hasSongId = !!songId;
 
-  // 如果提供了 lyrics prop，使用它；否则使用 Mock hook 获取的数据
-  const mockLyrics = hasSongId && lyricsLRC ? parseLRC(lyricsLRC) : DEFAULT_LYRICS;
-  const finalLyrics = propLyrics || mockLyrics;
+  // 从API响应中提取歌词内容和歌曲信息
+  const lyricsLRC = hasSongId && lyricsData?.data?.[0]?.content || "";
+  const song = hasSongId && songData?.data || undefined;
+
+  // 如果提供了 lyrics prop，使用它；否则使用 API 获取的数据
+  const apiLyrics = hasSongId && lyricsLRC ? parseLRC(lyricsLRC) : DEFAULT_LYRICS;
+  const finalLyrics = propLyrics || apiLyrics;
 
   // 计算居中行数
   useEffect(() => {

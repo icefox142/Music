@@ -2,7 +2,7 @@
  * 表情包网格展示组件
  */
 
-import { useEmojis } from "@/hooks/useEmojisMock";
+import { useEmojis } from "@/hooks/useEmojis";
 import type { Emoji } from "@/api/emojis";
 import "./EmojiGrid.css";
 
