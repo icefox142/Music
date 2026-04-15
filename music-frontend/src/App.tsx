@@ -10,6 +10,7 @@ import { BrowserRouter, Link } from "react-router-dom";
 import { AppRoutes } from "./routes";
 import { ThemeProvider, ThemeToggle } from "./components/music";
 import { EnhancedMusicPlayer } from "./components/music";
+import { UserMenu } from "./components/user";
 import "./App.css";
 
 // 创建 React Query 客户端
@@ -60,15 +61,10 @@ function App() {
                 </div>
               </div>
 
-              {/* 右侧：个人空间 + 主题切换 */}
+              {/* 右侧：用户菜单 + 主题切换 */}
               <div className="header-right">
                 <ThemeToggle />
-                <Link to="/profile" className="profile-link">
-                  <div className="avatar-placeholder">
-                    {/* 圆形头像占位 */}
-                  </div>
-                  <span className="profile-text">个人空间</span>
-                </Link>
+                <UserMenu />
               </div>
             </header>
 

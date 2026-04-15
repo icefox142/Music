@@ -62,7 +62,7 @@
 
 /* ===== 左侧侧边栏 ===== */
 .app-sidebar {
-  width: 260px;
+  width: 248px;
   background: var(--bg);
   border-right: 1px solid var(--border);
   display: flex;
@@ -210,7 +210,7 @@
   background: var(--bg-tertiary);
 }
 
-/* 右侧：个人空间 */
+/* 右侧：用户区域 */
 .header-right {
   flex: 1;
   display: flex;
@@ -218,37 +218,6 @@
   align-items: center;
   gap: 16px;
   min-width: 0;
-}
-
-.profile-link {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
-  color: var(--text-h);
-  padding: 6px 12px;
-  border-radius: 24px;
-  transition: background 0.2s;
-}
-
-.profile-link:hover {
-  background: var(--bg-tertiary);
-}
-
-.avatar-placeholder {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: 2px solid #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  flex-shrink: 0;
-}
-
-.profile-text {
-  font-size: 14px;
-  font-weight: 500;
-  white-space: nowrap;
 }
 
 /* ===== 主体内容区 ===== */
@@ -268,7 +237,7 @@
 /* 平板尺寸 */
 @media (max-width: 1024px) {
   .app-sidebar {
-    width: 220px;
+    width: 200px;
   }
 
   .app-header {
@@ -280,8 +249,8 @@
     max-width: 320px;
   }
 
-  .profile-text {
-    display: none;
+  .header-right {
+    gap: 12px;
   }
 }
 
@@ -293,7 +262,7 @@
     top: 64px;
     bottom: 0;
     z-index: 999;
-    width: 260px;
+    width: 248px;
     transform: translateX(-100%);
     transition: transform 0.3s ease;
   }

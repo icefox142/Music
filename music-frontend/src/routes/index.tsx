@@ -10,6 +10,7 @@ import { Playlists } from "@/pages/Playlists";
 import { Memes } from "@/pages/Memes";
 import { Music } from "@/pages/Music";
 import { Profile } from "@/pages/Profile";
+import { Settings } from "@/pages/Settings";
 
 // 简单的 404 组件（后续可移到独立文件）
 function NotFound() {
@@ -57,6 +58,9 @@ export function AppRoutes() {
 
       {/* 个人空间路由 */}
       <Route path="/profile" element={<Profile />} />
+
+      {/* 设置路由 */}
+      <Route path="/settings" element={<Settings />} />
 
       {/* 404 */}
       <Route path="*" element={<NotFound />} />
