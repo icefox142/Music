@@ -68,7 +68,7 @@ export function useEmojiCollections() {
 
 // 获取所有可用的标签（从表情包列表中提取）
 export function useEmojiTags() {
-  const { data: emojisData } = useEmojis({ pageSize: 1000 });
+  const { data: emojisData } = useEmojis({ pageSize: 30 });
 
   // 从所有表情包中提取唯一标签
   const tags = emojisData?.data
@@ -84,7 +84,7 @@ export function useEmojiTags() {
 
 // 获取所有可用的分类
 export function useEmojiCategories() {
-  const { data: emojisData } = useEmojis({ pageSize: 1000 });
+  const { data: emojisData } = useEmojis({ pageSize: 30 });
 
   // 从所有表情包中提取唯一分类
   const categories = emojisData?.data

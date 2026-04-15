@@ -4,6 +4,7 @@
 
 import { useEmojis } from "@/hooks/useEmojis";
 import type { Emoji } from "@/api/emojis";
+import { getImageUrl, getEmojiImageUrl } from "@/lib/config";
 import "./EmojiGrid.css";
 
 interface EmojiGridProps {
@@ -33,8 +34,13 @@ export function EmojiGrid({
   }
 
   if (error) {
-    const errorMessage = error instanceof Error ? error.message : "加载失败";
-    return <div className="emoji-grid-error">{errorMessage}</div>;
+
+    return (
+      <div className="emoji-grid-error">
+        <img src="/error/16991468a28bc1468e120c7b095fcd7b.jpg" alt="加载失败" />
+        
+      </div>
+    );
   }
 
   const emojis = data?.data || [];
@@ -97,15 +103,21 @@ interface EmojiCardProps {
 
 function EmojiCard({ emoji }: EmojiCardProps) {
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    e.currentTarget.src = "/placeholder-image.png";
+    const img = e.currentTarget;
+
+    // 防止无限循环：只设置一次占位图
+    if (!img.dataset.errorHandled) {
+      img.dataset.errorHandled = "true";
+      img.src = "/error/16991468a28bc1468e120c7b095fcd7b.jpg";  // 使用统一的错误提示图
+    }
   };
 
   return (
     <div className="emoji-card">
       <div className="emoji-card-image">
         <img
-          src={emoji.imageUrl}
-          alt={emoji.name}
+          src={getImageUrl(getEmojiImageUrl(emoji))}
+          alt={emoji.name || emoji.description || "表情包"}
           loading="lazy"
           onError={handleImageError}
         />

@@ -8,18 +8,21 @@ import api from "@/lib/axios";
 
 export interface Emoji {
   id: string;
-  name: string;
+  name?: string;  // 后端可能不返回 name
   description: string | null;
-  keywords: string[];
-  category: string | null;
-  imageUrl: string;
-  gifUrl: string | null;
-  stickerUrl: string | null;
+  keywords?: string[];
+  category?: string | null;
+  imageUrl?: string;  // 兼容旧字段
+  gifUrl?: string | null;
+  stickerUrl?: string | null;
+  url?: string;  // 后端实际返回的字段
   tags: string[];
-  isPublic: boolean;
+  isPublic?: boolean;
   status: "ENABLED" | "DISABLED";
   createdAt: string;
   updatedAt: string;
+  createdBy?: string;
+  updatedBy?: string;
 }
 
 export interface EmojiQueryParams {
